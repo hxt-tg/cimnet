@@ -37,3 +37,10 @@
 *.app
 
 # End of https://www.gitignore.io/api/c++
+
+
+#======== Self-defined ========
+# Output
+bin/
+release/
+
