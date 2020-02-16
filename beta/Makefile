@@ -1,6 +1,6 @@
 TGT_TEST    = test.out
 OPTM_LEVEL  = -O3
-CPPFLAGS    = --std=c++11 $(OPTM_LEVEL)
+CPPFLAGS    = --std=c++11 $(OPTM_LEVEL) -g
 INC         =
 
 

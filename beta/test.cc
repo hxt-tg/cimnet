@@ -57,11 +57,8 @@ class UndirectedNet {
     public:
     UndirectedNet (): _nodes(), _adjs() {}
     ~UndirectedNet () {
-        for (auto adj: _adjs) {
-            for (auto n: adj.second)
-                delete n.second;
-            adj.second.clear();
-        }
+        for (auto adj: _adjs)
+            remove_node(adj.first);
     }
 
     inline void add_node(const _NId &id, const _NData &node_data=_NData()) {
@@ -181,14 +178,15 @@ int main(void) {
     std::cout << "Edge data:" << std::endl;
     for (auto i = 0; i < net.number_of_nodes(); i++)
         for (auto j = 0; j < net.number_of_nodes(); j++)
-            /* try { */
+            try {
             std::cout << "[" << i << "->" << j << "] desc="
                 << net.edge(i, j).desc << "  amount=" << net.edge(i, j).amount
                 << std::endl;
-    /* } catch (const NetworkException &e) { */
-    /*     /1* std::cout << e.what() << std::endl; *1/ */
-    /*     continue; */
-    /* } */
+    } catch (const NetworkException &e) {
+        std::cout << e.what() << std::endl;
+        continue;
+    }
+    net.debug();
     return 0;
 }
 
