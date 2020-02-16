@@ -1,91 +1,127 @@
 #include <iostream>
+#include <string>
 #include <unordered_map>
 #include <exception>
 #include <vector>
 
-typedef unsigned int NodeId;
-typedef double NodeWeight;
-typedef double EdgeWeight;
-typedef std::unordered_map<NodeId, NodeWeight> Nodes;
-typedef std::unordered_map<NodeId, EdgeWeight> Neighbors;
-typedef std::unordered_map<NodeId, Neighbors> Adjacency;
+typedef double Weight;
+typedef unsigned int Id;
+class NoneType {};
 
-// Fake definition
-typedef std::pair<NodeId, NodeWeight> _Node;
-typedef std::pair<std::pair<NodeId, NodeId>, EdgeWeight> _Edge;
+template <class NodeId=Id, class NodeData=NoneType, class EdgeData=NoneType>
+class UndirectedNet;
 
+template <class NodeId, class NodeData, class EdgeData>
 class UndirectedNet {
+    typedef std::unordered_map<NodeId, NodeData> Nodes;
+    typedef std::unordered_map<NodeId, EdgeData> Neighbors;
+    typedef std::unordered_map<NodeId, Neighbors> Adjacency;
+
     public:
-        UndirectedNet ()
-            : nodes(), adjs() {}
-        ~UndirectedNet () {
-            for (auto adj: adjs)
-                adj.second.clear();
-        }
+    UndirectedNet (): _nodes(), _adjs() {}
+    ~UndirectedNet () {
+        for (auto adj: _adjs)
+            adj.second.clear();
+    }
 
-        void add_node(NodeId idx, NodeWeight weight=1.0) {
-            if (nodes.find(idx) != nodes.end())
-                return ;
-            nodes[idx] = weight;
-            Neighbors neighbor;
-            adjs[idx] = neighbor;
-        }
+    inline void add_node(const NodeId id, const NodeData data=NodeData()) {
+        _nodes[id] = data;
+        Neighbors neighbor;
+        _adjs[id] = neighbor;
+    }
 
-        void add_edge(NodeId idx1, NodeId idx2, EdgeWeight weight=1.0) {
-            if (nodes.find(idx1) == nodes.end())
-                add_node(idx1);
-            if (nodes.find(idx2) == nodes.end())
-                add_node(idx2);
-            adjs[idx1][idx2] = weight;
-            adjs[idx2][idx1] = weight;
-        }
+    inline void add_edge(const NodeId id1, const NodeId id2, const EdgeData &data=EdgeData()) {
+        if (!has_node(id1)) add_node(id1);
+        if (!has_node(id2)) add_node(id2);
+        _adjs[id1][id2] = data;
+        _adjs[id2][id1] = data;
+    }
 
-        bool is_neighbor(NodeId idx1, NodeId idx2) {
-            if (nodes.find(idx1) == nodes.end() || nodes.find(idx2) == nodes.end())
-                return false;
-            Neighbors nei1 = adjs[idx1];
-            return nei1.find(idx2) != nei1.end();
-        }
+    inline bool has_node(const NodeId id) {
+        return _nodes.find(id) != _nodes.end();
+    }
 
-        void print() {
-            std::cout << "Node info:" << std::endl;
-            for (auto n: nodes) {
-                std::cout << " " << n.first <<
+    inline bool is_neighbor(const NodeId id1, const NodeId id2) {
+        if (!has_node(id1) || !has_node(id2))
+            return false;
+        return _adjs[id1].find(id2) != _adjs[id1].end();
+    }
+
+    void print() {
+        std::cout << "Node info:" << std::endl;
+        for (auto n: _nodes) {
+            std::cout << " " << n.first <<
+                ", " << n.second << std::endl;
+        }
+        std::cout << "info:" << std::endl;
+        for (auto adj: _adjs) {
+            std::cout << " Node "  << adj.first << std::endl;
+            for (auto n: adj.second) {
+                std::cout << "  " << n.first <<
                     ", " << n.second << std::endl;
             }
-            std::cout << "info:" << std::endl;
-            for (auto adj: adjs) {
-                std::cout << " Node "  << adj.first << std::endl;
-                for (auto n: adj.second) {
-                    std::cout << "  " << n.first <<
-                        ", " << n.second << std::endl;
-                }
-            }
         }
+    }
+
+    inline Nodes &nodes() {
+        return _nodes;
+    }
+
+    inline int number_of_nodes() {
+        return _nodes.size();
+    }
+
+    inline int number_of_edges() {
+        int num = 0;
+        for (auto adj : _adjs)
+            num += adj.second.size();
+        return num;
+    }
+
+    Neighbors &operator[](const NodeId id) {
+        return _adjs.at(id);
+    }
 
     private:
-        Nodes nodes;
-        Adjacency adjs;
+    Nodes _nodes;
+    Adjacency _adjs;
 };
 
 
-class WellMixNet : public UndirectedNet {
+template <class NodeData=NoneType, class EdgeData=NoneType>
+class WellMixNet;
+template <class NodeData, class EdgeData>
+class WellMixNet
+: public UndirectedNet<int, NodeData, EdgeData>{
     public:
         WellMixNet(int num){
             for (int i = 0; i < num; i++)
                 for (int j = i+1; j < num; j++)
-                    add_edge(i, j);
+                    this->add_edge(i, j);
         }
-
 };
 
+typedef struct {
+    std::string desc;
+    int amount;
+} KindOfData;
 
 int main(void) {
-    for (int i = 0; i < 30; ++i) {
-        WellMixNet net(600);
-        /* std::cout << i << std::endl; */
-    }
+    WellMixNet<int, KindOfData> net(3);
+    net.nodes()[1] = 5;
+    net.add_edge(2, 1, {"123", 3});
+    // TODO: Ban this way to assign.
+    net[0][1].amount = 3;
 
+    std::cout << "Node data:" << std::endl;
+    for (auto i = 0; i < net.number_of_nodes(); i++)
+        std::cout << " Node " << i << "   data=" << net.nodes()[i] << std::endl;
+    std::cout << "Edge data:" << std::endl;
+    for (auto i = 0; i < net.number_of_nodes(); i++)
+        for (auto j = 0; j < net.number_of_nodes(); j++)
+            std::cout << "[" << i << "->" << j << "] desc="
+                << net[i][j].desc << "  amount=" << net[i][j].amount
+                << std::endl;
     return 0;
 }
 
