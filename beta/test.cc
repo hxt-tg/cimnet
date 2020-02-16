@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 #include <exception>
@@ -6,65 +7,123 @@
 
 typedef double Weight;
 typedef unsigned int Id;
-class NoneType {};
 
-template <class NodeId=Id, class NodeData=NoneType, class EdgeData=NoneType>
+class _NoneType {};
+
+class NetworkException : public std::exception {
+    public:
+        NetworkException() : _info("Network error: ") {}
+        NetworkException(const std::string &info) : _info("Network error: " + info) {}
+        void set_info(const std::string &info) {
+            _info = std::string("Network error: " + info);
+        }
+        const char *what() const noexcept {
+            return _info.c_str();
+        }
+    public:
+        std::string _info;
+};
+
+template <class _NId=Id>
+class NoEdgeException : public NetworkException {
+    public:
+        NoEdgeException(const _NId &id1, const _NId &id2) {
+            std::stringstream stream;
+            stream << "No edge between " << id1 <<
+                " and " << id2 << ".";
+            set_info(stream.str());
+        }
+};
+
+template <class _NId=Id>
+class NoNodeException: public NetworkException {
+    public:
+        NoNodeException(const _NId &id) {
+            std::stringstream stream;
+            stream << "Node " << id << " not found.";
+            set_info(stream.str());
+        }
+};
+
+template <class _NId=Id, class _NData=_NoneType, class _EData=_NoneType>
 class UndirectedNet;
 
-template <class NodeId, class NodeData, class EdgeData>
+template <class _NId, class _NData, class _EData>
 class UndirectedNet {
-    typedef std::unordered_map<NodeId, NodeData> Nodes;
-    typedef std::unordered_map<NodeId, EdgeData> Neighbors;
-    typedef std::unordered_map<NodeId, Neighbors> Adjacency;
+    typedef std::unordered_map<_NId, _NData> _NType;
+    typedef std::unordered_map<_NId, _EData *> _NeiType;
+    typedef std::unordered_map<_NId, _NeiType> _AdjType;
 
     public:
     UndirectedNet (): _nodes(), _adjs() {}
     ~UndirectedNet () {
-        for (auto adj: _adjs)
+        for (auto adj: _adjs) {
+            for (auto n: adj.second)
+                delete n.second;
             adj.second.clear();
+        }
     }
 
-    inline void add_node(const NodeId id, const NodeData data=NodeData()) {
-        _nodes[id] = data;
-        Neighbors neighbor;
-        _adjs[id] = neighbor;
+    inline void add_node(const _NId &id, const _NData &node_data=_NData()) {
+        _nodes[id] = node_data;
+        _adjs[id] = _NeiType();
     }
 
-    inline void add_edge(const NodeId id1, const NodeId id2, const EdgeData &data=EdgeData()) {
+    inline void add_edge(const _NId &id1, const _NId &id2, const _EData &edge_data=_EData()) {
         if (!has_node(id1)) add_node(id1);
         if (!has_node(id2)) add_node(id2);
-        _adjs[id1][id2] = data;
-        _adjs[id2][id1] = data;
+        _EData *data_ptr = new _EData();
+        *data_ptr = edge_data;
+        _adjs[id1][id2] = data_ptr;
+        _adjs[id2][id1] = data_ptr;
     }
 
-    inline bool has_node(const NodeId id) {
+    inline void remove_edge(const _NId &id1, const _NId &id2) {
+        if (!has_node(id1) || !has_node(id2))
+            return ;
+        _EData *data_ptr = _adjs.at(id1).at(id2);
+        delete data_ptr;
+        _NeiType nei = _adjs.at(id1);
+        nei.erase(nei.find(id2));
+        nei = _adjs.at(id2);
+        nei.erase(nei.find(id1));
+    }
+
+    inline void remove_node(const _NId &id) {
+        if (!has_node(id)) return ;
+        for (auto n : _adjs.at(id))
+            remove_edge(id, n.first);
+        _adjs.erase(_adjs.find(id));
+    }
+
+    inline bool has_node(const _NId &id) {
         return _nodes.find(id) != _nodes.end();
     }
 
-    inline bool is_neighbor(const NodeId id1, const NodeId id2) {
+    inline bool has_edge(const _NId &id1, const _NId &id2) {
         if (!has_node(id1) || !has_node(id2))
             return false;
         return _adjs[id1].find(id2) != _adjs[id1].end();
     }
 
-    void print() {
-        std::cout << "Node info:" << std::endl;
-        for (auto n: _nodes) {
-            std::cout << " " << n.first <<
-                ", " << n.second << std::endl;
-        }
-        std::cout << "info:" << std::endl;
-        for (auto adj: _adjs) {
-            std::cout << " Node "  << adj.first << std::endl;
-            for (auto n: adj.second) {
-                std::cout << "  " << n.first <<
-                    ", " << n.second << std::endl;
-            }
-        }
+    inline bool is_neighbor(const _NId &id1, const _NId &id2) {
+        return has_edge(id1, id2);
     }
 
-    inline Nodes &nodes() {
-        return _nodes;
+    inline _NData &node(const _NId &id) {
+        return _nodes.at(id);
+    }
+
+    inline _EData &edge(const _NId &id1, const _NId &id2) {
+        if (!has_node(id1))
+            throw NoNodeException<_NId>(id1);
+        if (!has_node(id2))
+            throw NoNodeException<_NId>(id2);
+        try {
+            return *(_adjs.at(id1).at(id2));
+        } catch (std::exception e){
+            throw NoEdgeException<_NId>(id1, id2);
+        }
     }
 
     inline int number_of_nodes() {
@@ -78,21 +137,21 @@ class UndirectedNet {
         return num;
     }
 
-    Neighbors &operator[](const NodeId id) {
+    _NeiType &operator[](const _NId &id) {
         return _adjs.at(id);
     }
 
     private:
-    Nodes _nodes;
-    Adjacency _adjs;
+    _NType _nodes;
+    _AdjType _adjs;
 };
 
 
-template <class NodeData=NoneType, class EdgeData=NoneType>
+template <class _NData=_NoneType, class _EData=_NoneType>
 class WellMixNet;
-template <class NodeData, class EdgeData>
+template <class _NData, class _EData>
 class WellMixNet
-: public UndirectedNet<int, NodeData, EdgeData>{
+: public UndirectedNet<int, _NData, _EData>{
     public:
         WellMixNet(int num){
             for (int i = 0; i < num; i++)
@@ -101,27 +160,35 @@ class WellMixNet
         }
 };
 
+
 typedef struct {
     std::string desc;
     int amount;
 } KindOfData;
 
+
 int main(void) {
     WellMixNet<int, KindOfData> net(3);
-    net.nodes()[1] = 5;
     net.add_edge(2, 1, {"123", 3});
-    // TODO: Ban this way to assign.
-    net[0][1].amount = 3;
+    net.node(1) = 5;
+    net.edge(1, 2).amount = 1;
+    net.edge(1, 2).amount = 1;
+    net.node(0) = 3;
 
     std::cout << "Node data:" << std::endl;
     for (auto i = 0; i < net.number_of_nodes(); i++)
-        std::cout << " Node " << i << "   data=" << net.nodes()[i] << std::endl;
+        std::cout << " Node " << i << "   data=" << net.node(i) << std::endl;
     std::cout << "Edge data:" << std::endl;
     for (auto i = 0; i < net.number_of_nodes(); i++)
         for (auto j = 0; j < net.number_of_nodes(); j++)
+            /* try { */
             std::cout << "[" << i << "->" << j << "] desc="
-                << net[i][j].desc << "  amount=" << net[i][j].amount
+                << net.edge(i, j).desc << "  amount=" << net.edge(i, j).amount
                 << std::endl;
+    /* } catch (const NetworkException &e) { */
+    /*     /1* std::cout << e.what() << std::endl; *1/ */
+    /*     continue; */
+    /* } */
     return 0;
 }
 
