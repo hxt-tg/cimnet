@@ -1,31 +1,24 @@
 # Project: cimnet
 
-vpath %.h include
+vpath %.h cimnet
 vpath %.cc src
-vpath %.o bin
 
 CPP       = g++
 HEADERS   = _types.h _base_net.h _exception.h random.h network.h
 LIBS      = -static-libgcc
-INC       = -Iinclude
+INC       = -I .
 CPPFLAGS  = -std=c++11 -Wall -Wextra -g
 
-.PHONY: all all-before all-release clean test
+.PHONY: all clean test
 
 # Release
-all: all-before all-release
-
-all-before:
-	mkdir -p bin _Release/cimnet
-
-all-release:
-	cp -f $(foreach n, $(HEADERS), include/$n) _Release/cimnet
+all: test
 
 test: test/test_base.cc
-	$(CPP) test/test_base.cc -o bin/test_base.run -I _Release $(CPPFLAGS)
+	$(CPP) test/test_base.cc -o test_base.run $(INC) $(CPPFLAGS)
 
 
 # Clean
 clean:
-	rm -rf bin _Release
+	rm -rf *.o *.run
 

@@ -40,9 +40,6 @@
 
 
 #======== Self-defined ========
-# Output
-bin/
-_Release/
 
 # vim
 .ycm_extra_conf.py
