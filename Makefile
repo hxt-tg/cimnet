@@ -7,7 +7,7 @@ CPP       = g++
 HEADERS   = _types.h _base_net.h _exception.h random.h network.h
 LIBS      = -static-libgcc
 INC       = -I .
-CPPFLAGS  = -std=c++11 -Wall -Wextra -g
+CPPFLAGS  = -std=c++11 -Wall -Wextra -g -O3
 
 .PHONY: all clean test
 
@@ -15,10 +15,10 @@ CPPFLAGS  = -std=c++11 -Wall -Wextra -g
 all: test
 
 test: test/test_base.cc
-	$(CPP) test/test_base.cc -o test_base.run $(INC) $(CPPFLAGS)
+	$(CPP) test/test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
 
 
 # Clean
 clean:
-	rm -rf *.o *.run
+	rm -rf *.o *.out
 
