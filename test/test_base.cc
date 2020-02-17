@@ -78,9 +78,16 @@ void test_modify_net() {
         std::cout << " " << nei.first << "-" << nei.second << std::endl;
 }
 
+void test_efficiency() {
+    for (int i = 0; i < 30; i++)
+        WellMixNet<> net(1000);
+    std::cout << "Done." << std::endl;
+}
+
 int main(void) {
     test_construct_net();
     test_modify_net();
+    test_efficiency();
     return 0;
 }
 

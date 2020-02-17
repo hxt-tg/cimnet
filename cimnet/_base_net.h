@@ -37,10 +37,11 @@ class Network {
             remove_node(n);
     }
 
-    inline void add_node(const _NId &id,
+    inline _NId add_node(const _NId &id,
             const _NData &node_data=_NData()) {
         _nodes[id] = node_data;
         _adjs[id] = _NeiType();
+        return id;
     }
 
     inline void add_edge(const _NId &id1, const _NId &id2,
@@ -65,7 +66,7 @@ class Network {
     }
 
     inline void remove_node(const _NId &id) {
-        if (!has_node(id)) return ;
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
         for (auto &n : neighbors(id))
             remove_edge(id, n);
         _adjs.erase(_adjs.find(id));
