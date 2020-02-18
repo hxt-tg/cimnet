@@ -4,10 +4,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
+#include <iostream>
 
 #include "_types.h"
 #include "_exception.h"
-
 
 
 struct HashPair {
@@ -28,10 +28,18 @@ class Network {
     typedef std::pair<_NId, _NId> _EPairType;
     typedef std::unordered_map<_NId, _EData *> _NeiType;
     typedef std::unordered_map<_NId, _NeiType> _AdjType;
+    typedef Network<_NId, _NData, _EData> _NetType;
     typedef std::unordered_set<std::pair<_NId, _NId>, HashPair> _ESetType;
 
     public:
     Network (): _nodes(), _adjs() {}
+    Network (const _NetType &net) : _nodes(), _adjs() {
+        for (auto n: net._nodes)
+            add_node(n.first, n.second);
+        for (auto e: net.edges())
+            add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
+    }
+
     ~Network () {
         for (auto &n : nodes())
             remove_node(n);
@@ -93,7 +101,20 @@ class Network {
         return _nodes.at(id);
     }
 
+    /* TODO: Optimize code structure of edge and get_edge_data. */
     inline _EData &edge(const _NId &id1, const _NId &id2) {
+        if (!has_node(id1))
+            throw NoNodeException<_NId>(id1);
+        if (!has_node(id2))
+            throw NoNodeException<_NId>(id2);
+        try {
+            return *(_adjs.at(id1).at(id2));
+        } catch (std::exception e){
+            throw NoEdgeException<_NId>(id1, id2);
+        }
+    }
+
+    inline _EData get_edge_data(const _NId &id1, const _NId &id2) const {
         if (!has_node(id1))
             throw NoNodeException<_NId>(id1);
         if (!has_node(id2))
@@ -146,6 +167,7 @@ class Network {
             }
         return e;
     }
+
 
     inline _NData &operator[](const _NId &id) {
         return node(id);
