@@ -5,5 +5,6 @@ typedef double Weight;
 typedef unsigned int Id;
 
 class _NoneType {};
+typedef _NoneType None;
 
 #endif /* ifndef CIMNET_TYPES */
