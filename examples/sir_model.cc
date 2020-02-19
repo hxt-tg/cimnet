@@ -47,16 +47,18 @@ class SIRSimulation {
             int x = nodes[randi(N)];
             switch (_n[x].status) {
                 case Susceptible:
-                    bool has_infected;
-                    has_infected=false;
-                    for (auto n: _n.neighbors(x))
-                        if (_n[n].status == Infected) {
-                            has_infected = true;
-                            break;
-                        }
-                    if (has_infected && randf() < _beta)
-                        _n[x].status = Infected;
-                    break;
+                    {
+                        bool has_infected=false;
+                        for (auto n: _n.neighbors(x))
+                            if (_n[n].status == Infected) {
+                                has_infected = true;
+                                break;
+                            }
+                        if (has_infected && randf() < _beta)
+                            _n[x].status = Infected;
+                        break;
+
+                    }
                 case Infected:
                     if (randf() < _gamma)
                         _n[x].status = Recovered;
