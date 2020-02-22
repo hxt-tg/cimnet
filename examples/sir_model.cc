@@ -1,18 +1,7 @@
 #include <iostream>
 #include <vector>
-#include "cimnet/_base_net.h"
 #include "cimnet/network.h"
 #include "cimnet/random.h"
-
-/* TODO:
- * 1. Construct net.
- * 2. Setting Is randomly.
- * 3. loop step:
- *    async update a node (loop N times):
- *      if S: check if neighbors contain I
- *      if I: to R on probability gamma
- *      if R: continue
- */
 
 typedef enum {
     Susceptible,
@@ -86,7 +75,7 @@ class SIRSimulation {
 };
 
 int main(void) {
-    WellMixNet<NodeData, _NoneType> net(100);
+    WellMixNet<NodeData, None> net(100);
     SIRSimulation sir(net, 0.1, 0.08);
     for (int i = 0; i < 100; i++) {
         sir.step();

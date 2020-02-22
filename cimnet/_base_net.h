@@ -19,7 +19,7 @@ struct HashPair {
         }
 };
 
-template <class _NId=Id, class _NData=_NoneType, class _EData=_NoneType>
+template <class _NId=Id, class _NData=None, class _EData=None>
 class Network;
 
 template <class _NId, class _NData, class _EData>

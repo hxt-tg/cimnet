@@ -3,7 +3,7 @@
 
 #include "_base_net.h"
 
-template <class _NData=_NoneType, class _EData=_NoneType> class WellMixNet;
+template <class _NData=None, class _EData=None> class WellMixNet;
 template <class _NData, class _EData>
 class WellMixNet
 : public Network<int, _NData, _EData>{
