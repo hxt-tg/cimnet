@@ -27,7 +27,7 @@ class Internet {
         }
 
         void send_tcp(const IpAddr &from, const IpAddr &to, size_t amount=1) {
-            if (!net.is_neighbor(from, to)) {
+            if (!net.has_successor(from, to)) {
                 std::cout << from << " and " << to << " is not linked." << std::endl;
             } else {
                 std::cout << "[TCP] from " << from << " to " << to
@@ -40,7 +40,7 @@ class Internet {
         }
 
         void send_udp(const IpAddr &from, const IpAddr &to, size_t amount=1) {
-            if (!net.is_neighbor(from, to)) {
+            if (!net.has_successor(from, to)) {
                 std::cout << from << " and " << to << " is not linked." << std::endl;
             } else {
                 std::cout << "[UDP] from " << from << " to " << to
@@ -48,8 +48,8 @@ class Internet {
                 net[from].n_sended += amount;
                 net[to].n_in_queue += amount;
                 net[to].n_received += amount;
-                for (auto nei: net.neighbors(from))
-                    net.edge(from, nei) += amount;
+                for (auto to: net.successors(from))
+                    net.edge(from, to) += amount;
             }
         }
 
@@ -69,14 +69,18 @@ class Internet {
                 << "  In queue: " << net[host].n_in_queue << " packets."
                 << std::endl;
             std::cout << "  Linked host:" << std::endl;
-            for (auto nei: net.neighbors(host))
+            for (auto nei: net.predecessors(host))
+                std::cout << "    From \"" << net[nei].hostname << "\" [ip="
+                    << nei << "] traffic: " << net.edge(nei, host) << " packets."
+                    << std::endl;
+            for (auto nei: net.successors(host))
                 std::cout << "    To \"" << net[nei].hostname << "\" [ip="
                     << nei << "] traffic: " << net.edge(host, nei) << " packets."
                     << std::endl;
         }
 
     private:
-        Network<IpAddr, HostData, PageViewAmount> net;
+        DirectedNetwork<IpAddr, HostData, PageViewAmount> net;
 };
 
 
@@ -98,6 +102,7 @@ int main(void) {
 
     /* Link hosts. */
     net.add_hyperlink(server, router);
+    net.add_hyperlink(router, server);
     for (size_t i = 0; i < host.size(); i++)
         net.add_hyperlink(router, host[i]);
 
