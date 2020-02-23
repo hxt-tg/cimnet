@@ -28,7 +28,7 @@ void print_node_edge_data(Network<int, int, KindOfData> &net,
 }
 
 void test_construct_net(void) {
-    WellMixNet<int, KindOfData> net(3);
+    FullConnectedNetwork<int, KindOfData> net(3);
     net.add_edge(2, 1, {"123", 3});
     net.node(1) = 5;
     net.edge(1, 2).amount = 1;
@@ -90,7 +90,7 @@ void test_modify_net() {
 
 void test_efficiency() {
     for (int i = 0; i < 30; i++)
-        WellMixNet<> net(1000);
+        FullConnectedNetwork<> net(1000);
     std::cout << "Done." << std::endl;
 }
 

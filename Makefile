@@ -10,13 +10,14 @@ INC       = -I .
 OPT_LEVEL = -O3
 CPPFLAGS  = -std=c++11 -Wall -Wextra $(OPT_LEVEL)
 
-.PHONY: all clean test
+.PHONY: all clean
 
-all: test
+all: test_base.out test_network.out
 
 clean:
 	rm -rf *.o *.out
 
-test: test/test_base.cc
+test_base.out: test/test_base.cc $(HEADERS)
 	$(CPP) test/test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
-
+test_network.out: test/test_network.cc $(HEADERS)
+	$(CPP) test/test_network.cc -o test_network.out $(INC) $(CPPFLAGS)
