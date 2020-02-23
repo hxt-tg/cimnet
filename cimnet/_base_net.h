@@ -31,6 +31,13 @@ class Network {
     typedef Network<_NId, _NData, _EData> _NetType;
     typedef std::unordered_set<std::pair<_NId, _NId>, HashPair> _ESetType;
 
+    friend std::ostream& operator<<(std::ostream& out, const Network& net){
+        out << "Network {#(node)=" << net.number_of_nodes()
+            << ", #(edge)=" << net.number_of_edges()
+            << ", #(degree)=" << net.total_degree() << "}";
+        return out;
+    }
+
     public:
     Network (): _nodes(), _adjs() {}
     Network (const _NetType &net) : _nodes(), _adjs() {
@@ -131,15 +138,23 @@ class Network {
     }
 
     inline int number_of_edges() const {
-        int num = 0;
-        for (auto &adj : _adjs)
-            num += adj.second.size();
-        return num;
+        return total_degree() / 2;
     }
 
-    inline int degree(const _NId &id) {
+    inline int total_degree() const {
+        int degree = 0;
+        for (auto &adj : _adjs)
+            degree += adj.second.size();
+        return degree;
+    }
+
+    inline int degree(const _NId &id) const {
         if (!has_node(id)) return 0;
         return _adjs.at(id).second.size();
+    }
+
+    inline const _AdjType &adjacency() const {
+        return _adjs;
     }
 
     inline std::vector<_NId> neighbors(const _NId &id) const {

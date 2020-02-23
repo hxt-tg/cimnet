@@ -94,10 +94,21 @@ void test_efficiency() {
     std::cout << "Done." << std::endl;
 }
 
+void test_properties() {
+    Network<> n;
+    n.add_edge(1, 2);
+    n.add_edge(1, 3);
+    for (auto adj : n.adjacency())
+        for (auto nei : adj.second)
+            std::cout << adj.first << "-" << nei.first << std::endl;
+    std::cout << n << std::endl;
+}
+
 int main(void) {
-    test_construct_net();
+    /* test_construct_net(); */
     /* test_modify_net(); */
     /* test_efficiency(); */
+    test_properties();
     return 0;
 }
 
