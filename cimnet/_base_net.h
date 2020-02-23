@@ -161,7 +161,7 @@ class Network {
 
     inline int degree(const _NId &id) const {
         if (!has_node(id)) return 0;
-        return _adjs.at(id).second.size();
+        return _adjs.at(id).size();
     }
 
     inline const _AdjType &adjacency() const {
@@ -356,17 +356,17 @@ class DirectedNetwork {
 
     inline int in_degree(const _NId &id) const {
         if (!has_node(id)) return 0;
-        return _pred.at(id).second.size();
+        return _pred.at(id).size();
     }
 
     inline int out_degree(const _NId &id) const {
         if (!has_node(id)) return 0;
-        return _succ.at(id).second.size();
+        return _succ.at(id).size();
     }
 
     inline int degree(const _NId &id) const {
         if (!has_node(id)) return 0;
-        return _pred.at(id).second.size() + _succ.at(id).second.size();
+        return _pred.at(id).size() + _succ.at(id).size();
     }
 
     inline const _AdjType &succ_adjacency() const {
