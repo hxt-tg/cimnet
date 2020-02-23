@@ -110,8 +110,19 @@ void test_directed_network() {
     net.add_edge(3, 2, {"III to II", 2});
     net[1] = 2.3;
     net[3] = 4.5;
+    std::cout << "Network (raw):" << std::endl;
+    for (auto i: net.nodes())
+        std::cout << " Node " << i << "   data=" << net.node(i) << std::endl;
+    for (auto e: net.edges())
+            std::cout << "[" << e.first << "->" << e.second << "] desc="
+                << net.edge(e.first, e.second).desc
+                << "  amount=" << net.edge(e.first, e.second).amount
+                << std::endl;
     DirectedNetwork<int, Weight, KindOfData> net2(net);
     net2[2] = 9.9;
+    net2.add_edge(2, 2, {"Self loop", 0});
+    net2.add_edge(2, 2, {"Self loop second", 9});
+    net2.remove_node(2);
     std::cout << "Network (copied):" << std::endl;
     for (auto i: net2.nodes())
         std::cout << " Node " << i << "   data=" << net2.node(i) << std::endl;

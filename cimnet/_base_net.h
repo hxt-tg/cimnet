@@ -36,7 +36,7 @@ class Network {
     typedef std::unordered_set<std::pair<_NId, _NId>, HashPair> _ESetType;
     typedef std::unordered_set<_NId> _NeiSetType;
 
-    friend std::ostream& operator<<(std::ostream& out, const Network& net){
+    friend std::ostream& operator<<(std::ostream& out, const Network& net) {
         out << "Network {#(node)=" << net.number_of_nodes()
             << ", #(edge)=" << net.number_of_edges()
             << ", #(degree)=" << net.total_degree() << "}";
@@ -46,6 +46,12 @@ class Network {
     public:
     Network (): _nodes(), _adjs() {}
     Network (const _NetType &net) : _nodes(), _adjs() {
+        for (auto n: net._nodes)
+            add_node(n.first, n.second);
+        for (auto e: net.edges())
+            add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
+    }
+    Network (const _DiNetType &net) : _nodes(), _adjs() {
         for (auto n: net._nodes)
             add_node(n.first, n.second);
         for (auto e: net.edges())
@@ -76,7 +82,7 @@ class Network {
     }
 
     inline void remove_edge(const _NId &id1, const _NId &id2) {
-        if (!has_edge(id1, id2)) return ;
+        if (!has_edge(id1, id2)) throw NoEdgeException<_NId>(id1, id2);
         _NeiType &nei1 = _adjs.at(id1);
         _NeiType &nei2 = _adjs.at(id2);
         _EData *data_ptr = nei1.at(id2);
@@ -181,13 +187,12 @@ class Network {
         _ESetType e;
         for (auto &i : _adjs)
             for (auto &j : i.second) {
-                int _i = i.first, _j = j.first;
+                _NId _i = i.first, _j = j.first;
                 if (_i > _j) std::swap(_i, _j);
                 e.insert(std::make_pair(_i, _j));
             }
         return e;
     }
-
 
     inline _NData &operator[](const _NId &id) {
         return node(id);
@@ -210,8 +215,8 @@ class DirectedNetwork {
     typedef std::unordered_set<std::pair<_NId, _NId>, HashPair> _ESetType;
     typedef std::unordered_set<_NId> _NeiSetType;
 
-    friend std::ostream& operator<<(std::ostream& out, const DirectedNetwork& net){
-        out << "Network {#(node)=" << net.number_of_nodes()
+    friend std::ostream& operator<<(std::ostream& out, const DirectedNetwork& net) {
+        out << "Directed network {#(node)=" << net.number_of_nodes()
             << ", #(edge)=" << net.number_of_edges()
             << ", #(degree)=" << net.total_degree() << "}";
         return out;
@@ -224,6 +229,14 @@ class DirectedNetwork {
             add_node(n.first, n.second);
         for (auto e: net.edges())
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
+    }
+    DirectedNetwork (const _NetType &net): _nodes(), _pred(), _succ() {
+        for (auto n: net._nodes)
+            add_node(n.first, n.second);
+        for (auto e: net.edges()) {
+            add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
+            add_edge(e.second, e.first, net.get_edge_data(e.first, e.second));
+        }
     }
 
     ~DirectedNetwork () {
@@ -251,7 +264,7 @@ class DirectedNetwork {
     }
 
     inline void remove_edge(const _NId &id1, const _NId &id2) {
-        if (!has_edge(id1, id2)) return ;
+        if (!has_edge(id1, id2)) throw NoEdgeException<_NId>(id1, id2, true);
         _NeiType &succ = _succ.at(id1);
         _NeiType &pred = _pred.at(id2);
         _EData *data_ptr = succ.at(id2);
@@ -282,7 +295,7 @@ class DirectedNetwork {
 
     inline bool has_predecessor(const _NId &id1, const _NId &id2) const {
         if (!has_node(id1) || !has_node(id2)) return false;
-        return _pred.at(id2).find(id1) != _pred.at(id2).end();
+        return _pred.at(id1).find(id2) != _pred.at(id1).end();
     }
 
     inline bool has_edge(const _NId &id1, const _NId &id2) const {
@@ -338,10 +351,7 @@ class DirectedNetwork {
     }
 
     inline int total_degree() const {
-        int degree = 0;
-        for (auto &s : _succ)
-            degree += s.second.size();
-        return degree * 2;
+        return number_of_edges() * 2;
     }
 
     inline int in_degree(const _NId &id) const {
@@ -408,7 +418,6 @@ class DirectedNetwork {
                 e.insert(std::make_pair(i.first, j.first));
         return e;
     }
-
 
     inline _NData &operator[](const _NId &id) {
         return node(id);
