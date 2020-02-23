@@ -104,11 +104,30 @@ void test_properties() {
     std::cout << n << std::endl;
 }
 
+void test_directed_network() {
+    DirectedNetwork<int, Weight, KindOfData> net;
+    net.add_edge(1, 2, {"I to II", 1});
+    net.add_edge(3, 2, {"III to II", 2});
+    net[1] = 2.3;
+    net[3] = 4.5;
+    DirectedNetwork<int, Weight, KindOfData> net2(net);
+    net2[2] = 9.9;
+    std::cout << "Network (copied):" << std::endl;
+    for (auto i: net2.nodes())
+        std::cout << " Node " << i << "   data=" << net2.node(i) << std::endl;
+    for (auto e: net2.edges())
+            std::cout << "[" << e.first << "->" << e.second << "] desc="
+                << net2.edge(e.first, e.second).desc
+                << "  amount=" << net2.edge(e.first, e.second).amount
+                << std::endl;
+}
+
 int main(void) {
     /* test_construct_net(); */
     /* test_modify_net(); */
     /* test_efficiency(); */
-    test_properties();
+    /* test_properties(); */
+    test_directed_network();
     return 0;
 }
 
