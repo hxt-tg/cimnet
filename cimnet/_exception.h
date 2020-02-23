@@ -24,10 +24,14 @@ class NetworkException : public std::exception {
 template <class _NId=Id>
 class NoEdgeException : public NetworkException {
     public:
-        NoEdgeException(const _NId &id1, const _NId &id2){
+        NoEdgeException(const _NId &id1, const _NId &id2, bool is_directed=false) {
             std::stringstream stream;
-            stream << "No edge between " << id1 <<
-                " and " << id2 << ".";
+            if (is_directed)
+                stream << "No edge from " << id1 <<
+                    " to " << id2 << ".";
+            else
+                stream << "No edge between " << id1 <<
+                    " and " << id2 << ".";
             set_info(stream.str());
         }
 };
