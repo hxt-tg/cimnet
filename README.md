@@ -8,7 +8,7 @@ It follow the standard of `C++11`.
 CimNet provides features below:
 
 - easy-to-use tools for creation and modification of complex networks;
-- store self-defined data into nodes and edges;
+- storing self-defined data into nodes and edges;
 - several implementations of typical networks;
 - the ability to inherite and expand your own network structures.
 
@@ -50,6 +50,7 @@ Developer: Xintao Hu ([@hxt-tg](https://github.com/hxt-tg),
 email: [hxt.taoge@gmail.com](mailto:hxt.taoge@gmail.com))
 
 Code review: Jialong Sun ([@jl-sun](https://github.com/jl-sun))
+email: [sunjialong9@gmail.com](mailto:sunjialong9@gmail.com))
 
 (We are at the stage of internal test. If you want to contribute to this
 project, send mails to @hxt-tg.)
