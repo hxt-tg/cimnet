@@ -82,6 +82,8 @@ class Network {
     }
 
     inline void remove_edge(const _NId &id1, const _NId &id2) {
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         if (!has_edge(id1, id2)) throw NoEdgeException<_NId>(id1, id2);
         _NeiType &nei1 = _adjs.at(id1);
         _NeiType &nei2 = _adjs.at(id2);
