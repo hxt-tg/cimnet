@@ -1,10 +1,14 @@
-/************************************************************
- *  Name: Pseudorandom Number Generator - Mersenne twister  *
- *  Copyright: GPL v3.0                                     *
- *  Author: Makoto Matsumoto & Takuji Nishimura             *
- *  Date: 1997                                              *
- *  Wiki: https://en.wikipedia.org/wiki/Mersenne_Twister    *
- ************************************************************/
+/*
+ *  This file contains Mersenne twister pseudorandom number
+ *  generator. The authors of this algorithm are Makoto
+ *  Matsumoto & Takuji Nishimura.
+ *  Wiki: https://en.wikipedia.org/wiki/Mersenne_Twister
+ *  (Xintao Hu is not the author of this part of code.
+ *   If there is any infringement, please contact via email:
+ *   hxt.taoge@gmail.com)
+ *
+ *  For further usage, check out http://doc.hxtcloud.cn.
+ */
 
 #ifndef CIMNET_RANDOM
 #define CIMNET_RANDOM

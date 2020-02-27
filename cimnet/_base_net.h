@@ -1,3 +1,15 @@
+/*
+ * This file contains code from https://github.com/hxt-tg/cimnet
+ * and is covered under the copyright and warranty notices:
+ * "Copyright (C) 2020 CimNet Developers
+ *  Xintao Hu <hxt.taoge@gmail.com>"
+ */
+
+/*
+ *  This file contains base classes of network.
+ *  For further usage, check out http://doc.hxtcloud.cn.
+ */
+
 #ifndef CIMNET_BASE_NET
 #define CIMNET_BASE_NET
 
