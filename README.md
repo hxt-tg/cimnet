@@ -22,7 +22,7 @@ Follow these steps to code with CimNet:
 3. Add `/path/to/your/project` to include directory configuration.
 If you use `g++` as your project compiler, compile single file with
 ```sh
-g++ xxx.cc -o xxx.out -std=c++11 -O2 -I /path/to/cimnet
+g++ xxx.cc -o xxx.out -std=c++11 -O2 -I /path/to/your/project
 ```
 
 ## Simple usage
@@ -49,7 +49,7 @@ int main(void) {
 Developer: Xintao Hu ([@hxt-tg](https://github.com/hxt-tg),
 email: [hxt.taoge@gmail.com](mailto:hxt.taoge@gmail.com))
 
-Code review: Jialong Sun ([@jl-sun](https://github.com/jl-sun))
+Review & part of docs: Jialong Sun ([@jl-sun](https://github.com/jl-sun))
 email: [sunjialong9@gmail.com](mailto:sunjialong9@gmail.com))
 
 (We are at the stage of internal test. If you want to contribute to this
