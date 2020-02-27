@@ -123,10 +123,8 @@ class Network {
 
     /* TODO: Optimize code structure of edge and get_edge_data. */
     inline _EData &edge(const _NId &id1, const _NId &id2) {
-        if (!has_node(id1))
-            throw NoNodeException<_NId>(id1);
-        if (!has_node(id2))
-            throw NoNodeException<_NId>(id2);
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_adjs.at(id1).at(id2));
         } catch (std::exception e){
@@ -135,10 +133,8 @@ class Network {
     }
 
     inline _EData get_edge_data(const _NId &id1, const _NId &id2) const {
-        if (!has_node(id1))
-            throw NoNodeException<_NId>(id1);
-        if (!has_node(id2))
-            throw NoNodeException<_NId>(id2);
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_adjs.at(id1).at(id2));
         } catch (std::exception e){
@@ -266,6 +262,8 @@ class DirectedNetwork {
     }
 
     inline void remove_edge(const _NId &id1, const _NId &id2) {
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         if (!has_edge(id1, id2)) throw NoEdgeException<_NId>(id1, id2, true);
         _NeiType &succ = _succ.at(id1);
         _NeiType &pred = _pred.at(id2);
@@ -318,10 +316,8 @@ class DirectedNetwork {
 
     /* TODO: Optimize code structure of edge and get_edge_data. */
     inline _EData &edge(const _NId &id1, const _NId &id2) {
-        if (!has_node(id1))
-            throw NoNodeException<_NId>(id1);
-        if (!has_node(id2))
-            throw NoNodeException<_NId>(id2);
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_succ.at(id1).at(id2));
         } catch (std::exception e){
@@ -330,10 +326,8 @@ class DirectedNetwork {
     }
 
     inline _EData get_edge_data(const _NId &id1, const _NId &id2) const {
-        if (!has_node(id1))
-            throw NoNodeException<_NId>(id1);
-        if (!has_node(id2))
-            throw NoNodeException<_NId>(id2);
+        if (!has_node(id1)) throw NoNodeException<_NId>(id1);
+        if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_succ.at(id1).at(id2));
         } catch (std::exception e){
