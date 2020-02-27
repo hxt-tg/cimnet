@@ -4,6 +4,111 @@
 #include "_base_net.h"
 #include "random.h"
 
+/* Docs
+*
+*  Node labels are the integers 0 to n-1 if not specified in the docs.
+*
+*
+*  FullConnectedNetwork(int n_nodes)
+*  
+*  Parameters
+*  n_nodes: nonnegative integer
+*      The number of nodes the fully connected network is to contain.
+*  
+*  
+*  RegularNetwork(int n_nodes, int n_links)
+*  
+*  Parameters
+*  n_nodes: nonnegative integer
+*      The number of nodes the regular network is to contain.
+*  n_links: nonnegative integer (bigger than n_nodes-1)
+*      The number of links the regular network is to contain.
+*  
+*  Create a regular network with n_nodes nodes and n_links nodes.
+*  
+*  
+*  ERNetwork(int n_nodes, double prob_link)
+*  
+*  Parameters
+*  n_nodes: nonnegative integer
+*      The number of nodes.
+*  prob_link: floating point number (between 0 and 1)
+*      The probability of link creation.
+*  
+*  Create a Erdős-Rényi network with n_nodes nodes and 
+*  choose each of possible link with probability prob_link.
+*  
+*  
+*  GridNetwork(int width, int height, int n_neighbors=4)
+*  
+*  Parameters
+*  width: nonnegative integer
+*      The width of the grid network.
+*  height: nonnegative integer
+*      The height of the grid network.
+*  n_neighbors: nonnegative integer (by default 4)
+*      The number of neighbors per node. Must be a multiple of 4.
+*  
+*  Create a 2-dimensional grid network of width * height.
+*  
+*  
+*  CubicNetwork(int length, int width, int height)
+*  
+*  Parameters
+*  length: nonnegative integer (by default 4)
+*      The number of neighbors per node. Must be a multiple of 4.
+*  width: nonnegative integer
+*      The width of the grid network.
+*  height: nonnegative integer
+*      The height of the grid network.
+*  
+*  Create a cubic network of length * width * height.
+*  
+*  
+*  HoneycombNetwork(int honeycomb_width, int honeycomb_height)
+*  
+*  Parameters
+*  honeycomb_width: nonnegative integer
+*      The width of a honeycomb.
+*  honeycomb_height: nonnegative integer
+*      The height of a honeycomb.
+*  
+*  Create a honeycomb network given the size of honeycombs.
+*  The honeycomb network is a network whose nodes and edges 
+*  are the hexagonal tiling of the plane.
+*  For more details see: https://en.wikipedia.org/wiki/Honeycomb_structure
+*  
+*  
+*  KagomeNetwork(int kagome_width, int kagome_height)
+*  
+*  Parameters
+*  kagome_width: nonnegative integer
+*      The width of a Kagome lattice.
+*  kagome_height: nonnegative integer
+*      The height of a Kagome lattice.
+*  
+*  Create a Kagome lattice network given the size of a kagome lattice, 
+*  which is combined by equilateral triangles and regular hexagons, 
+*  arranged so that each hexagon is surrounded by triangles and vice versa.
+*  For more details see: https://en.wikipedia.org/wiki/Trihexagonal_tiling
+*  
+*  
+*  ScaleFreeNetwork(int n_nodes, int n_edges_per_node)
+*  
+*  Parameters
+*  n_nodes: nonnegative integer
+*      The number of nodes.
+*  n_edges_per_node: nonnegative integer
+*      The number of neighbors of each node.
+*  
+*  Create a scale-free (Barabási–Albert) network given the number of nodes 
+*  and the number of edges per node.
+*  The scale-free network is constructed by attaching new nodes with 
+*  a fixed number of edges that are preferentially attached to 
+*  existing high-degree nodes.
+*  
+*/
+
 template <class _NData=None, class _EData=None>
 class FullConnectedNetwork;
 template <class _NData, class _EData>
