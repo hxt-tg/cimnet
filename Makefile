@@ -21,7 +21,7 @@ clean:
 release:
 	rm -rf release
 	mkdir release
-	zip release/CimNet-$(VERSION).zip cimnet examples test README.md LICENSE Makefile
+	zip -r release/CimNet-$(VERSION).zip cimnet examples test README.md LICENSE Makefile
 
 test_base.out: test/test_base.cc $(HEADERS)
 	$(CPP) test/test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
