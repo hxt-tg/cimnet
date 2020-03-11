@@ -48,7 +48,7 @@ class Internet {
                 net[from].n_sended += amount;
                 net[to].n_in_queue += amount;
                 net[to].n_received += amount;
-                for (auto to: net.successors(from))
+                for (auto &to: net.successors(from))
                     net.edge(from, to) += amount;
             }
         }
@@ -69,11 +69,11 @@ class Internet {
                 << "  In queue: " << net[host].n_in_queue << " packets."
                 << std::endl;
             std::cout << "  Linked host:" << std::endl;
-            for (auto nei: net.predecessors(host))
+            for (auto &nei: net.predecessors(host))
                 std::cout << "    From \"" << net[nei].hostname << "\" [ip="
                     << nei << "] traffic: " << net.edge(nei, host) << " packets."
                     << std::endl;
-            for (auto nei: net.successors(host))
+            for (auto &nei: net.successors(host))
                 std::cout << "    To \"" << net[nei].hostname << "\" [ip="
                     << nei << "] traffic: " << net.edge(host, nei) << " packets."
                     << std::endl;

@@ -14,43 +14,43 @@ typedef struct {
 } NodeData;
 
 class SIRSimulation {
-    typedef Network<int, NodeData, _NoneType> SIRNetwork;
+    typedef Network<int, NodeData, None> SIRNetwork;
     public:
-    SIRSimulation(SIRNetwork &net, double beta, double gamma,
+    SIRSimulation(SIRNetwork &n, double beta, double gamma,
             double init_I_rate=0.01)
-        : _step(0), _beta(beta), _gamma(gamma), _n(net) {
-        std::vector<int> nodes = _n.nodes();
+        : _step(0), _beta(beta), _gamma(gamma), net(n) {
+        std::vector<int> nodes = net.nodes();
         for (auto i = 0; i < (int)nodes.size() - 1; i++)
             std::swap(nodes[i], nodes[randi(nodes.size()-i-1)+i+1]);
-        int init_I_num = init_I_rate * _n.number_of_nodes();
+        int init_I_num = init_I_rate * net.number_of_nodes();
 
-        for (int i = 0; i < _n.number_of_nodes(); i++)
-            _n[nodes[i]].status = i < init_I_num ? Infected : Susceptible;
+        for (int i = 0; i < net.number_of_nodes(); i++)
+            net[nodes[i]].status = i < init_I_num ? Infected : Susceptible;
     }
 
     void step() {
         _step++;
-        auto nodes = _n.nodes();
-        int N = _n.number_of_nodes();
+        auto nodes = net.nodes();
+        int N = net.number_of_nodes();
         for (int i = 0; i < N; i++) {
             int x = nodes[randi(N)];
-            switch (_n[x].status) {
+            switch (net[x].status) {
                 case Susceptible:
                     {
                         bool has_infected=false;
-                        for (auto n: _n.neighbors(x))
-                            if (_n[n].status == Infected) {
+                        for (auto &n: net.neighbors(x))
+                            if (net[n].status == Infected) {
                                 has_infected = true;
                                 break;
                             }
                         if (has_infected && randf() < _beta)
-                            _n[x].status = Infected;
+                            net[x].status = Infected;
                         break;
 
                     }
                 case Infected:
                     if (randf() < _gamma)
-                        _n[x].status = Recovered;
+                        net[x].status = Recovered;
                     break;
                 default:
                     break;
@@ -60,9 +60,9 @@ class SIRSimulation {
 
     void stat() {
         int cnt[3] = {0};
-        for (auto n: _n.nodes())
-            cnt[_n[n].status] ++;
-        double N = _n.number_of_nodes();
+        for (auto &n: net.nodes())
+            cnt[net[n].status] ++;
+        double N = net.number_of_nodes();
         printf("[%4d] S:%6.2lf I:%6.2lf R:%6.2lf\n", _step,
                 cnt[Susceptible]/N, cnt[Infected]/N, cnt[Recovered]/N);
     }
@@ -71,11 +71,11 @@ class SIRSimulation {
     int _step;
     double _beta;
     double _gamma;
-    SIRNetwork _n;
+    SIRNetwork net;
 };
 
 int main(void) {
-    WellMixNet<NodeData, None> net(100);
+    FullConnectedNetwork<NodeData, None> net(100);
     SIRSimulation sir(net, 0.1, 0.08);
     for (int i = 0; i < 100; i++) {
         sir.step();
@@ -83,3 +83,4 @@ int main(void) {
     }
     return 0;
 }
+
