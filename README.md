@@ -44,6 +44,10 @@ int main(void) {
 }
 ```
 
+Public documentation could be found at **docs/zh-cn.md**. (We only have Chinese version currently. You may need some translator to read.)
+
+Documentation was written by [Haroopad](http://pad.haroopress.com/). (You may have better experience if you installed it.)
+
 ## Contributor
 
 Developer: Xintao Hu ([@hxt-tg](https://github.com/hxt-tg),
@@ -52,15 +56,10 @@ email: [hxt.taoge@gmail.com](mailto:hxt.taoge@gmail.com))
 Review & part of docs: Jialong Sun ([@jl-sun](https://github.com/jl-sun))
 email: [sunjialong9@gmail.com](mailto:sunjialong9@gmail.com))
 
-(We are at the stage of internal test. If you want to contribute to this
-project, send mails to @hxt-tg.)
 
 ## Bug reports
 
-CimNet is a private repository until adequately tested.
-However, please report any bugs via email to contributors.
-
-If you are one of contributors, report bugs in
+Report bugs in
 [GitHub issues](https://github.com/hxt-tg/cimnet/issues).
 
 ## License
