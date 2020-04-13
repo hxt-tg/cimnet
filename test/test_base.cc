@@ -17,8 +17,8 @@ void print_node_edge_data(Network<int, int, KindOfData> &net,
     for (auto e: net.edges()) {
         try {
             std::cout << "[" << e.first << "->" << e.second << "] desc="
-                << net.edge(e.first, e.second).desc
-                << "  amount=" << net.edge(e.first, e.second).amount
+                << net(e.first, e.second).desc
+                << "  amount=" << net(e.first, e.second).amount
                 << std::endl;
         } catch (const NetworkException &e) {
             std::cout << e.what() << std::endl;
@@ -31,9 +31,9 @@ void test_construct_net(void) {
     FullConnectedNetwork<int, KindOfData> net(3);
     net.add_edge(2, 1, {"123", 3});
     net.node(1) = 5;
-    net.edge(1, 2).amount = 1;
-    net.edge(1, 2).amount = 1;
-    net.node(0) = 3;
+    net(1, 2).amount = 1;
+    net(1, 2).amount = 1;
+    net[0] = 3;   // Same as net.node(0) = 3;
     net.add_edge(1, 3, {"new node", 1});
     std::cout << "Neighbor of 1: ";
     for (auto n : net.neighbors(1))
@@ -42,7 +42,7 @@ void test_construct_net(void) {
     print_node_edge_data(net, "net");
 
     Network<int, int, KindOfData> net_copy(net);
-    net_copy.edge(1, 3).desc = "update by copy";
+    net_copy(1, 3).desc = "update by copy";
     net_copy[1] = 999;
     std::cout << "=================" << std::endl;
     print_node_edge_data(net, "net origin");
@@ -115,8 +115,8 @@ void test_directed_network() {
         std::cout << " Node " << i << "   data=" << net.node(i) << std::endl;
     for (auto e: net.edges())
             std::cout << "[" << e.first << "->" << e.second << "] desc="
-                << net.edge(e.first, e.second).desc
-                << "  amount=" << net.edge(e.first, e.second).amount
+                << net(e.first, e.second).desc
+                << "  amount=" << net(e.first, e.second).amount
                 << std::endl;
     DirectedNetwork<int, Weight, KindOfData> net2(net);
     net2[2] = 9.9;
@@ -128,8 +128,8 @@ void test_directed_network() {
         std::cout << " Node " << i << "   data=" << net2.node(i) << std::endl;
     for (auto e: net2.edges())
             std::cout << "[" << e.first << "->" << e.second << "] desc="
-                << net2.edge(e.first, e.second).desc
-                << "  amount=" << net2.edge(e.first, e.second).amount
+                << net2(e.first, e.second).desc
+                << "  amount=" << net2(e.first, e.second).amount
                 << std::endl;
 }
 

@@ -208,6 +208,10 @@ class Network {
         return node(id);
     }
 
+    inline _EData &operator()(const _NId &id1, const _NId &id2) {
+        return edge(id1, id2);
+    }
+
     private:
     _NType _nodes;
     _AdjType _adjs;
@@ -429,6 +433,10 @@ class DirectedNetwork {
 
     inline _NData &operator[](const _NId &id) {
         return node(id);
+    }
+
+    inline _EData &operator()(const _NId &id1, const _NId &id2) {
+        return edge(id1, id2);
     }
 
     private:
