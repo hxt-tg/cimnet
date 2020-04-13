@@ -11,17 +11,12 @@ INC       = -I .
 OPT_LEVEL = -O3
 CPPFLAGS  = -std=c++11 -Wall -Wextra $(OPT_LEVEL)
 
-.PHONY: all clean release
+.PHONY: all clean
 
 all: test_base.out test_network.out
 
 clean:
 	rm -rf *.o *.out release
-
-release:
-	rm -rf release
-	mkdir release
-	zip -r release/CimNet-$(VERSION).zip cimnet docs examples test README.md LICENSE Makefile --exclude=*.out --exclude=*.run --exclude=*.py
 
 test_base.out: test/test_base.cc $(HEADERS)
 	$(CPP) test/test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
