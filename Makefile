@@ -21,7 +21,7 @@ clean:
 release:
 	rm -rf release
 	mkdir release
-	zip -r release/CimNet-$(VERSION).zip cimnet examples test README.md LICENSE Makefile --exclude=*.out --exclude=*.run --exclude=*.py
+	zip -r release/CimNet-$(VERSION).zip cimnet docs examples test README.md LICENSE Makefile --exclude=*.out --exclude=*.run --exclude=*.py
 
 test_base.out: test/test_base.cc $(HEADERS)
 	$(CPP) test/test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
