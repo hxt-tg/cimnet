@@ -1,6 +1,6 @@
 # CimNet
 
-_Version: 0.1.0_
+_Version: 0.1.1_
 
 CimNet is a pure C++ library for simulations on complex networks.
 It follow the standard of `C++11`.

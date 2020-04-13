@@ -3,7 +3,7 @@
 vpath %.h cimnet
 vpath %.cc src
 
-VERSION   = 0.1.0
+VERSION   = 0.1.1
 CPP       = g++
 HEADERS   = _types.h _base_net.h _exception.h random.h network.h
 LIBS      = -static-libgcc
