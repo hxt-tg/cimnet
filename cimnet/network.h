@@ -213,10 +213,12 @@ class GridNetwork: public Network<int, _NData, _EData>{
 
             this->width = width;
             this->height = height;
+            this->n_neighbors = n_neighbors;
         }
     private:
         int width;
         int height;
+        int n_neighbors;
 };
 
 
