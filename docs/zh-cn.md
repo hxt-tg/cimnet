@@ -4,7 +4,45 @@ _作者：胡鑫涛_
 
 _版本号：0.1.1_
 
-[TOC]
+- [`CimNet`简介](#cimnet简介)
+- [安装`CimNet`](#安装cimnet)
+- [`CimNet`使用说明](#cimnet使用说明)
+  - [文件结构](#文件结构)
+  - [关于随机数](#关于随机数)
+  - [使用网络](#使用网络)
+    - [1. 创建网络](#1-创建网络)
+    - [2. 编辑网络结构](#2-编辑网络结构)
+    - [3. 存储节点/边数据](#3-存储节点边数据)
+    - [4. 网络拷贝和转换](#4-网络拷贝和转换)
+    - [5. 网络数据和遍历](#5-网络数据和遍历)
+    - [6. 已实现的网络结构](#6-已实现的网络结构)
+- [`CimNet`接口说明](#cimnet接口说明)
+  - [基本数据类型](#基本数据类型)
+  - [网络异常类](#网络异常类)
+    - [通用网络异常](#通用网络异常)
+    - [缺失节点异常](#缺失节点异常)
+    - [缺失边异常](#缺失边异常)
+  - [通用无向网络类`Network`](#通用无向网络类network)
+  - [通用有向网络类`DirectedNetwork`](#通用有向网络类directednetwork)
+  - [已实现的常用网络](#已实现的常用网络)
+    - [FullConnectedNetwork - 全连接网络](#fullconnectednetwork---全连接网络)
+    - [RegularNetwork - 规则网络](#regularnetwork---规则网络)
+    - [ERNetwork - ER随机图](#ernetwork---er随机图)
+    - [GridNetwork - 格子网络](#gridnetwork---格子网络)
+    - [CustomizableGridNetwork - 定制化格子网络](#customizablegridnetwork---定制化格子网络)
+    - [CubicNetwork - 立方体网络](#cubicnetwork---立方体网络)
+    - [HoneycombNetwork - 蜂窝网络](#honeycombnetwork---蜂窝网络)
+    - [KagomeNetwork - Kagome晶格网络](#kagomenetwork---kagome晶格网络)
+    - [ScaleFreeNetwork - 无标度网络](#scalefreenetwork---无标度网络)
+- [关于C++语言](#关于c语言)
+  - [面向对象](#面向对象)
+  - [实例化与模板类](#实例化与模板类)
+  - [对象的指针与引用](#对象的指针与引用)
+  - [标准容器类的遍历](#标准容器类的遍历)
+  - [继承](#继承)
+- [项目贡献者](#项目贡献者)
+- [漏洞报告](#漏洞报告)
+- [开源协议](#开源协议)
 
 ## `CimNet`简介
 
@@ -38,13 +76,13 @@ g++ main.cc -o main.out -std=c++11 -O2 -I /path/to/your/project
 
 `CimNet`工具包含于`cimnet`文件夹内，由以下文件组成：
 
-|文件|内容概述|
-|-------|--------|
-|`cimnet/_types.h`|基础数据类型|
-|`cimnet/_exception.h`|网络异常类|
-|`cimnet/_base_net.h`|通用无向/有向网络类|
-|`cimnet/network.h`|已实现的常用网络结构|
-|`cimnet/random.h`|MT随机数生成|
+| 文件                  | 内容概述             |
+| --------------------- | -------------------- |
+| `cimnet/_types.h`     | 基础数据类型         |
+| `cimnet/_exception.h` | 网络异常类           |
+| `cimnet/_base_net.h`  | 通用无向/有向网络类  |
+| `cimnet/network.h`    | 已实现的常用网络结构 |
+| `cimnet/random.h`     | MT随机数生成         |
 
 一般情况下，你只需要引用`cimnet/network.h`这个头文件，就可以使用默认的基础数据类型、网络异常类和有向/无向通用网络类。已实现的常用网络结构全部继承于通用无向网络，网络的节点编号类型为整型。
 
@@ -56,11 +94,11 @@ g++ main.cc -o main.out -std=c++11 -O2 -I /path/to/your/project
 
 `cimnet/random.h`中的函数如下：
 
-|函数|说明|
-|---|---|
-|`sgenrand(unsigned long i)`|将参数`i`设置为随机数种子|
-|`randi(unsigned long N)`|返回一个0 ~ N-1的随机整数|
-|`randf()`|返回一个0~1的随机小数（double型）|
+| 函数                        | 说明                              |
+| --------------------------- | --------------------------------- |
+| `sgenrand(unsigned long i)` | 将参数`i`设置为随机数种子         |
+| `randi(unsigned long N)`    | 返回一个0 ~ N-1的随机整数         |
+| `randf()`                   | 返回一个0~1的随机小数（double型） |
 
 ### 使用网络
 
@@ -227,11 +265,11 @@ int main(void) {
 
 基本数据类型在`cimnet/_types.h`内定义，在引用`cimnet/network.h`后可以直接使用。建议使用以下更加表意的类型对你的变量定义。基本数据类型包含以下三种类型：
 
-|类型名|原始类型|说明|
-|---|---|---|
-|`Id`|`unsigned int`|默认的节点编号类型|
-|`Weight`|`double`|建议作为网络权重数据的类型|
-|`None`|`class _NoneType {}`|不存储任何数据的空类，标识"空"的概念|
+| 类型名   | 原始类型             | 说明                                 |
+| -------- | -------------------- | ------------------------------------ |
+| `Id`     | `unsigned int`       | 默认的节点编号类型                   |
+| `Weight` | `double`             | 建议作为网络权重数据的类型           |
+| `None`   | `class _NoneType {}` | 不存储任何数据的空类，标识"空"的概念 |
 
 ### 网络异常类
 
@@ -256,9 +294,9 @@ NoNodeException<NodeId>::
 ```
 模板参数默认为`Id`。构造缺失节点异常类时需要传入：
 
-|参数|说明|
-|---|---|
-|`id`|缺失节点的编号|
+| 参数 | 说明           |
+| ---- | -------------- |
+| `id` | 缺失节点的编号 |
 
 #### 缺失边异常
 继承关系：`class NoEdgeException : public NetworkException`
@@ -269,11 +307,11 @@ NoEdgeException<NodeId>::
 ```
 模板参数默认为`Id`。构造缺失边异常类时需要传入：
 
-|参数|说明|
-|---|---|
-|`id1`|缺失边的第一个节点编号|
-|`id2`|缺失边的第二个节点编号|
-|`is_directed`|是否为有向边（默认为`false`）|
+| 参数          | 说明                          |
+| ------------- | ----------------------------- |
+| `id1`         | 缺失边的第一个节点编号        |
+| `id2`         | 缺失边的第二个节点编号        |
+| `is_directed` | 是否为有向边（默认为`false`） |
 
 ### 通用无向网络类`Network`
 
@@ -516,9 +554,9 @@ FullConnectedNetwork<NodeData, EdgeData>::
 ```
 构造网络时需要传入：
 
-| 参数     | 说明          |
-| ------- | ------------- |
-|`n_nodes`| 网络的总节点数  |
+| 参数      | 说明           |
+| --------- | -------------- |
+| `n_nodes` | 网络的总节点数 |
 
 
 #### RegularNetwork - 规则网络
@@ -529,10 +567,10 @@ RegularNetwork<NodeData, EdgeData>::
 ```
 构造网络时需要传入：
 
-| 参数       | 说明                      |
-| --------- | ------------------------- |
-|`n_nodes`  | 网络的总节点数              |
-|`n_links`  | 每个节点顺时针方向新增的边数  |
+| 参数      | 说明                         |
+| --------- | ---------------------------- |
+| `n_nodes` | 网络的总节点数               |
+| `n_links` | 每个节点顺时针方向新增的边数 |
 
 `n_links`不能大于`n_nodes-1`。该网络创建后，每个点的度均为`2*n_links`。
 
@@ -545,10 +583,10 @@ ERNetwork<NodeData, EdgeData>::
 ```
 构造网络时需要传入：
 
-| 参数       | 说明                 |
-| --------- | -------------------- |
-|`n_nodes`  | 网络的总节点数         |
-|`prob_link`| 每两对节点间的连边概率  |
+| 参数        | 说明                   |
+| ----------- | ---------------------- |
+| `n_nodes`   | 网络的总节点数         |
+| `prob_link` | 每两对节点间的连边概率 |
 
 
 #### GridNetwork - 格子网络
@@ -560,16 +598,99 @@ GridNetwork<NodeData, EdgeData>::
 
 构造网络时需要传入：
 
-| 参数         | 说明                      |
-| ----------- | ------------------------- |
-|`width`      | 格子网络的宽                |
-|`height`     | 格子网络的高                |
-|`n_neighbors`| 每个节点邻居的数量，默认为`4` |
+| 参数          | 说明                          |
+| ------------- | ----------------------------- |
+| `width`       | 格子网络的宽                  |
+| `height`      | 格子网络的高                  |
+| `n_neighbors` | 每个节点邻居的数量，默认为`4` |
 
 格子网络是循环边界的结构，即每一行的末尾与开头相连，列向同理。
 
-目前`GridNetwork`只支持`n_neighbors`为`4`和`8`。
+`GridNetwork`只支持`n_neighbors`为`4`和`8`，如果需要其他邻居情况请使用`CustomizableGridNetwork`。
 
+
+#### CustomizableGridNetwork - 定制化格子网络
+
+```cpp
+CustomizableGridNetwork<NodeData, EdgeData>::
+	CustomizableGridNetwork(int width, int height, double radius,
+        CustomizableGridNetwork<>::MaskFunction mask_func);
+CustomizableGridNetwork<NodeData, EdgeData>::
+	CustomizableGridNetwork(int width, int height,
+        CustomizableGridNetwork<>::RangeMask &mask);
+```
+
+该网络会创建一个二维格子网络，并且支持自己定制节点的连边逻辑，已实现连接给定半径的欧几里得距离范围连边和曼哈顿距离范围连边。同时也支持自定义范围(RangeMask)或范围函数(MaskFunction)。
+
+该类中使用以下类型定义：
+
+| 类型           | 原始定义                   | 说明                         |
+| -------------- | ------------------------- |-----------------------------|
+| `RangeShift`   | `std::pair<int, int>`     | 范围中单个行列偏移量          |
+| `RangeMask`    | `std::vector<RangeShift>` | 以偏移量组成的格点连边范围     |
+| `MaskFunction` | `RangeMask (*)(double)`   | 给定半径返回范围的函数指针     |
+
+该网络支持两种形式的输入。
+
+如果给定半径或范围函数构造网络时，需要传入：
+
+| 参数          | 说明                         |
+| ------------- | -----------------------------|
+| `width`       | 格子网络的宽                  |
+| `height`      | 格子网络的高                  |
+| `radius`      | 连边范围半径（小于等于）       |
+| `mask_func`   | 连边范围函数（默认曼哈顿）     |
+
+注：连边范围函数可以使用内置的欧几里得距离范围（`CustomizableGridNetwork<>::EuclideanMask`，圆形）和曼哈顿距离范围（`CustomizableGridNetwork<>::ManhattanMask`，菱形），也可自行实现。
+
+如果给定范围数组构造网络时，需要传入：
+
+| 参数          | 说明                         |
+| ------------- | -----------------------------|
+| `width`       | 格子网络的宽                  |
+| `height`      | 格子网络的高                  |
+| `mask`        | 指定了范围偏移量的数组         |
+
+注：范围偏移量的第一个值是每行向下的偏移量，第二个值是每列向下的偏移量。
+
+定制化格子网络是循环边界的结构，即每一行的末尾与开头相连，列向同理。
+
+可以参考以下例子：
+```cpp
+/* 创建自定义的连边范围函数：（例如radius=2)
+        o
+        o
+    o o x o o
+        o
+        o
+ */
+CustomizableGridNetwork<>::RangeMask cross_mask(double radius) {
+    CustomizableGridNetwork<>::RangeMask mask;
+    for (int i = 1; i <= (int)radius; i++) {
+        mask.push_back(std::make_pair(0, i));
+        mask.push_back(std::make_pair(0, -i));
+        mask.push_back(std::make_pair(i, 0));
+        mask.push_back(std::make_pair(-i, 0));
+    }
+    return mask;
+}
+
+void test_custom_grid() {
+    /* 10x10的二维格子，按曼哈顿距离小于等于3的范围对每个节点进行连边 */
+    CustomizableGridNetwork<> net(10, 10, 3);
+    /* 10x10的二维格子，按欧式距离小于等于3的范围对每个节点进行连边 */
+    CustomizableGridNetwork<> net(10, 10, 3, CustomizableGridNetwork<>::EuclideanMask);
+    /* 定义一个范围数组 */
+    std::vector<std::pair<int, int>> mask;
+    mask.push_back(std::make_pair(0, 1));
+    mask.push_back(std::make_pair(0, 2));
+    mask.push_back(std::make_pair(1, 0));
+    /* 10x10的二维格子，按给定范围数组的偏移对每个节点进行连边 */
+    CustomizableGridNetwork<> net(10, 10, mask);
+    /* 10x10的二维格子，按自定义连边函数的半径小于等于3的范围对每个节点进行连边 */
+    CustomizableGridNetwork<> net(10, 10, 4, cross_mask);
+}
+```
 
 #### CubicNetwork - 立方体网络
 
@@ -580,11 +701,11 @@ CubicNetwork<NodeData, EdgeData>::
 
 构造网络时需要传入：
 
-| 参数    | 说明         |
-| ------ | ----------- |
-|`length`| 立方体的长    |
-|`width` | 立方体的宽    |
-|`height`| 立方体的高    |
+| 参数     | 说明       |
+| -------- | ---------- |
+| `length` | 立方体的长 |
+| `width`  | 立方体的宽 |
+| `height` | 立方体的高 |
 
 立方体网络是循环边界的结构，即每一行的末尾与开头相连，列向同理。
 
@@ -598,10 +719,10 @@ HoneycombNetwork<NodeData, EdgeData>::
 
 构造网络时需要传入：
 
-| 参数              | 说明      |
-| ---------------- | --------- |
-|`honeycomb_width` | 蜂窝的宽   |
-|`honeycomb_height`| 蜂窝的高   |
+| 参数               | 说明     |
+| ------------------ | -------- |
+| `honeycomb_width`  | 蜂窝的宽 |
+| `honeycomb_height` | 蜂窝的高 |
 
 蜂窝网络是循环边界的结构，即每一行的末尾与开头相连，列向同理。
 
@@ -619,10 +740,10 @@ KagomeNetwork<NodeData, EdgeData>::
 
 构造网络时需要传入：
 
-| 参数           | 说明          |
-| ------------- | ------------- |
-|`kagome_width` | Kagome晶格的宽 |
-|`kagome_height`| Kagome晶格的高 |
+| 参数            | 说明           |
+| --------------- | -------------- |
+| `kagome_width`  | Kagome晶格的宽 |
+| `kagome_height` | Kagome晶格的高 |
 
 Kagome晶格网络是循环边界的结构，即每一行的末尾与开头相连，列向同理。
 
@@ -640,10 +761,10 @@ ScaleFreeNetwork<NodeData, EdgeData>::
 
 构造网络时需要传入：
 
-| 参数              | 说明               |
-| ---------------- | ------------------ |
-|`n_nodes`         | 网络总节点数         |
-|`n_edges_per_node`| 每个节点增长的连边数  |
+| 参数               | 说明                 |
+| ------------------ | -------------------- |
+| `n_nodes`          | 网络总节点数         |
+| `n_edges_per_node` | 每个节点增长的连边数 |
 
 
 ## 关于C++语言
