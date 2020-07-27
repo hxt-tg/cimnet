@@ -266,6 +266,8 @@ class CustomizableGridNetwork: public Network<int, _NData, _EData> {
     typedef RangeMask (*MaskFunction)(double);
 
     private:
+    int width;
+    int height;
     void _build(int width, int height, RangeMask &mask) {
         if (width < 0 || height < 0)
             throw NetworkException("Width and height should be positive.");
@@ -277,6 +279,8 @@ class CustomizableGridNetwork: public Network<int, _NData, _EData> {
             for (int y = 0; y < w; ++y)
                 for (RangeShift &s : mask)
                     this->add_edge(x * w + y, mod(x+s.first, w) * w + mod(y+s.second, h));
+        this->width = width;
+        this->height = height;
     }
 
     public:
