@@ -55,6 +55,49 @@ void test_scale_free() {
     std::cout << n << std::endl;
 }
 
+/* Function for creating custom mask function */
+CustomizableGridNetwork<>::RangeMask cross_mask(double radius) {
+    CustomizableGridNetwork<>::RangeMask mask;
+    for (int i = 1; i <= (int)radius; i++) {
+        mask.push_back(std::make_pair(0, i));
+        mask.push_back(std::make_pair(0, -i));
+        mask.push_back(std::make_pair(i, 0));
+        mask.push_back(std::make_pair(-i, 0));
+    }
+    return mask;
+}
+
+void test_customizable_grid() {
+    /* Test for Manhattan distance */
+    CustomizableGridNetwork<> ln1(10, 10, 3);
+    std::cout << "ManhattanMask grid:" << std::endl
+              << ln1 << std::endl;
+    /* Test for Euclidean distance */
+    CustomizableGridNetwork<> ln2(10, 10, 3,
+            CustomizableGridNetwork<>::EuclideanMask);
+    std::cout << "EuclideanMask grid:" << std::endl
+              << ln2 << std::endl;
+    /* Test for custom mask */
+    std::vector<std::pair<int, int>> mask;
+    mask.push_back(std::make_pair( 0, 1));
+    mask.push_back(std::make_pair( 0, 2));
+    mask.push_back(std::make_pair( 1, 0));
+
+    CustomizableGridNetwork<> ln3(10, 10, mask);
+    std::cout << "Custom mask grid: " << std::endl
+              << ln3 << std::endl;
+    std::cout << "Node [" << 5 << "]: ";
+    for (auto &y : ln3.neighbors(5))
+        std::cout << y << " ";
+    std::cout << std::endl;
+
+    /* Test for custom mask function */
+    CustomizableGridNetwork<> ln4(10, 10, 4, cross_mask);
+    std::cout << "Custom mask function grid:" << std::endl
+              << ln4 << std::endl;
+}
+
+
 int main(void) {
     unsigned long seed = time(NULL);
     sgenrand(seed);
@@ -67,5 +110,6 @@ int main(void) {
     test_honeycomb();
     test_kagome();
     test_scale_free();
+    test_customizable_grid();
     return 0;
 }

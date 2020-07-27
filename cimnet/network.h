@@ -54,9 +54,33 @@
  *  height: nonnegative integer
  *      The height of the grid.
  *  n_neighbors: nonnegative integer (by default 4)
- *      The number of neighbors per node. Must be a multiple of 4.
+ *      The number of neighbors per node. Only support 4 & 8.
  *
  *  Create a 2-dimensional grid network of width * height.
+ *
+ *
+ *  CustomizableGridNetwork(int width, int height, double radius,
+ *                          MaskFunction mask_func=ManhattanMask)
+ *  CustomizableGridNetwork(int width, int height, RangeMask &mask)
+ *
+ *  Parameters
+ *  width: nonnegative integer
+ *      The width of the grid.
+ *  height: nonnegative integer
+ *      The height of the grid.
+ *  radius: double number
+ *      The radius of neighboring range mask. Supporting Manhattan distance
+ *      (ManhattanMask) and Euclidean distance (EuclideanMask).
+ *  mask_func: CustomizableGridNetwork<>::MaskFunction (by default ManhattanMask)
+ *      A function create a mask given radius of range.
+ *  mask: A vector of pairs of integers
+ *      A list of RangeShift which indicates the neighboring shift of each node.
+ *
+ *  Create a 2-dimensional grid network of width * height, where each
+ *  node connects to neighbors given radius of range under Manhattan
+ *  distance, Euclidean distance or custommized range mask function.
+ *  If a customized mask is given, each node connects to neighbors
+ *  according to the mask.
  *
  *
  *  CubicNetwork(int length, int width, int height)
@@ -120,6 +144,16 @@
 
 #include "_base_net.h"
 #include "random.h"
+
+#include <cmath>
+
+
+/* Utility functions */
+inline int mod(int x, int m) {
+    return (x%m + m) % m;
+}
+/* End of Utility functions */
+
 
 template <class _NData=None, class _EData=None>
 class FullConnectedNetwork;
@@ -219,6 +253,70 @@ class GridNetwork: public Network<int, _NData, _EData>{
         int width;
         int height;
         int n_neighbors;
+};
+
+
+template <class _NData=None, class _EData=None>
+class CustomizableGridNetwork;
+template <class _NData, class _EData>
+class CustomizableGridNetwork: public Network<int, _NData, _EData> {
+    public:
+    typedef std::pair<int, int> RangeShift;
+    typedef std::vector<RangeShift> RangeMask;
+    typedef RangeMask (*MaskFunction)(double);
+
+    private:
+    void _build(int width, int height, RangeMask &mask) {
+        if (width < 0 || height < 0)
+            throw NetworkException("Width and height should be positive.");
+        int w = width, h = height;
+        for (int x = 0; x < h; ++x)
+            for (int y = 0; y < w; ++y)
+                this->add_node(x * w + y);
+        for (int x = 0; x < h; ++x)
+            for (int y = 0; y < w; ++y)
+                for (RangeShift &s : mask)
+                    this->add_edge(x * w + y, mod(x+s.first, w) * w + mod(y+s.second, h));
+    }
+
+    public:
+    CustomizableGridNetwork(int width, int height, RangeMask &mask) {
+        this->_build(width, height, mask);
+    }
+
+    CustomizableGridNetwork(int width, int height, double radius,
+            const MaskFunction func=CustomizableGridNetwork::ManhattanMask) {
+        RangeMask mask = func(radius);
+        this->_build(width, height, mask);
+    }
+
+    static RangeMask ManhattanMask(double radius) {
+        RangeMask mask;
+        int r = radius;
+        for (int x = 0; x <= r; ++x)
+            for (int y = 1; y <= r-x; ++y) {
+                mask.push_back(std::make_pair( x,  y));
+                mask.push_back(std::make_pair( y, -x));
+                mask.push_back(std::make_pair(-x, -y));
+                mask.push_back(std::make_pair(-y,  x));
+            }
+        return mask;
+    }
+
+    static RangeMask EuclideanMask(double radius) {
+        RangeMask mask;
+        int r = floor(radius);
+        double square_radius = radius * radius;
+        for (int x = 0; x <= r; ++x)
+            for (int y = 1; y <= r; ++y) {
+                if (x * x + y * y > square_radius) continue;
+                mask.push_back(std::make_pair( x,  y));
+                mask.push_back(std::make_pair( y, -x));
+                mask.push_back(std::make_pair(-x, -y));
+                mask.push_back(std::make_pair(-y,  x));
+            }
+        return mask;
+    }
 };
 
 
