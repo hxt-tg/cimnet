@@ -227,9 +227,8 @@ class GridNetwork: public Network<int, _NData, _EData>{
         GridNetwork(int width, int height, int n_neighbors=4) {
             if (width < 0 || height < 0)
                 throw NetworkException("Width and height should be positive.");
-            if (n_neighbors < 0 || n_neighbors > width * height ||
-                    n_neighbors % 4 != 0)
-                throw NetworkException("Number of neighbors should be positive.");
+            if (n_neighbors != 4 && n_neighbors != 8)
+                throw NetworkException("Number of neighbors should be 4 or 8. Otherwise use CustomizableGridNetwork instead.");
 
             int w = width, h = height;
             for (int i = 0; i < h; ++i) {
