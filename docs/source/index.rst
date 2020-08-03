@@ -5,16 +5,14 @@
 
 .. _cimnet-index:
 
-CimNet - C++复杂网络工具包
-==========================
+CimNet - C++ 复杂网络工具包
+===========================
 
 :开发 & 文档:   Hu Xintao (\ `@hxt-tg <https://github.com/hxt-tg>`__\ )
 
 :文档审校: Sun Jialong (\ `@jl-sun <https://github.com/jl-sun>`__\ )
 :版本:  ``0.1.3``
 
-简介
-----
 
 CimNet 是一个纯 C++ 实现的复杂网络库，它基于 ``C++11`` 标准的语法编写。
 
@@ -34,4 +32,3 @@ CimNet 支持以下特性：
    reference/intro.rst
    about-cpp.rst
    credits-license.rst
-

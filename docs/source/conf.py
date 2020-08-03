@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-#
 # Configuration file for the Sphinx documentation builder.
 #
-# This file does only contain a selection of the most common options. For a
-# full list see the documentation:
-# http://www.sphinx-doc.org/en/master/config
+# This file only contains a selection of the most common options. For a full
+# list see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
 
@@ -30,6 +28,7 @@ version = 'latest'
 release = '0.1.3'
 primary_domain = 'cpp'
 add_function_parentheses = False
+github_url = 'https://github.com/hxt-tg/cimnet'
 
 # -- General configuration ---------------------------------------------------
 
@@ -50,12 +49,6 @@ extensions = [
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-# The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
-
 # The master toctree document.
 master_doc = 'index'
 
@@ -71,9 +64,6 @@ language = 'zh_CN'
 # This pattern also affects html_static_path and html_extra_path .
 exclude_patterns = []
 
-# The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
-
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -88,7 +78,6 @@ html_theme = 'sphinx_rtd_theme'
 # documentation.
 #
 
-github_url = 'https://github.com/hxt-tg/cimnet'
 vcs_pageview_mode = ''
 html_show_sourcelink = False
 
@@ -124,11 +113,14 @@ htmlhelp_basename = 'CimNetdoc'
 # -- Options for LaTeX output ------------------------------------------------
 latex_elements = {
     'preamble': r'''
-    \hypersetup{unicode=true}
-    \usepackage{CJKutf8}
-    \AtBeginDocument{\begin{CJK}{UTF8}{gbsn}}
-    \AtEndDocument{\end{CJK}}
+    \usepackage{svg}
     '''
+    # 'preamble': r'''
+    # \hypersetup{unicode=true}
+    # \usepackage{CJKutf8}
+    # \AtBeginDocument{\begin{CJK}{UTF8}{gbsn}}
+    # \AtEndDocument{\end{CJK}}
+    # '''
     # 'papersize' : 'a4paper',
     # 'utf8extra' : '',
     # 'inputenc'  : '',
@@ -154,11 +146,13 @@ latex_elements = {
     # 'figure_align': 'htbp',
 }
 
+latex_use_parts = False
+
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'CimNet.tex', 'CimNet Documentation',
+    (master_doc, 'CimNet.tex', 'CimNet 开发文档',
      'hxt-tg', 'manual'),
 ]
 
@@ -168,7 +162,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'cimnet', 'CimNet Documentation',
+    (master_doc, 'cimnet', 'CimNet 开发文档',
      [author], 1)
 ]
 
@@ -179,8 +173,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'CimNet', 'CimNet Documentation',
-     author, 'CimNet', 'A C++ library for simulations on complex networks.',
+    (master_doc, 'CimNet', 'CimNet 开发文档',
+     author, 'CimNet', 'C++ 复杂网络工具包',
      'Miscellaneous'),
 ]
 

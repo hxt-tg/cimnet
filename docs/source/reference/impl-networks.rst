@@ -211,7 +211,7 @@ ER随机图
         :param honeycomb_height: 蜂窝的高
         :throw NetworkException: :var:`honeycomb_width` 或 :var:`honeycomb_height` 小于 0
 
-    .. image:: /_static/images/Honeycomb.svg
+    .. image:: /_static/images/Honeycomb.*
 
 .. _kagome-network:
 
@@ -231,7 +231,7 @@ Kagome 晶格网络
         :param kagome_height: Kagome 晶格的高
         :throw NetworkException: :var:`kagome_width` 或 :var:`kagome_height` 小于 0
 
-    .. image:: /_static/images/Kagome.svg
+    .. image:: /_static/images/Kagome.*
 
 .. _scale-free-network:
 
