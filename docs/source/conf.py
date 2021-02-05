@@ -25,7 +25,7 @@ author = '@hxt-tg'
 # The short X.Y version
 version = 'latest'
 # The full version, including alpha/beta/rc tags
-release = '0.1.3'
+release = '0.1.4'
 primary_domain = 'cpp'
 add_function_parentheses = False
 github_url = 'https://github.com/hxt-tg/cimnet'
