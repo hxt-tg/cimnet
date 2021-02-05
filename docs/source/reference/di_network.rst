@@ -147,7 +147,15 @@
         访问节点数据，可以读写。
 
         :param id: 节点编号
-        :return: 节点 :var:`id` 上的节点数据对象引用
+        :return: 节点 :var:`id` 上的节点数据对象的引用
+        :throw NoNodeException: 节点 :var:`id` 不存在
+
+    .. function:: _NData get_node_data(const _NId &id) const
+
+        访问点数据的一份拷贝，修改该函数返回的变量不会改变 :class:`DirectedNetwork` 对象存储的点数据。
+
+        :param id: 节点编号
+        :return: 节点 :var:`id` 上的节点数据对象的拷贝
         :throw NoNodeException: 节点 :var:`id` 不存在
 
     .. function:: _EData &edge(const _NId &id1, const _NId &id2)
@@ -162,7 +170,7 @@
 
     .. function:: _EData get_edge_data(const _NId &id1, const _NId &id2) const
 
-        访问边数据的一份拷贝，修改该函数返回的变量不会改变 :class:`Network` 对象存储的边数据。
+        访问边数据的一份拷贝，修改该函数返回的变量不会改变 :class:`DirectedNetwork` 对象存储的边数据。
 
         :param id1: 边上的起始节点编号
         :param id2: 边上的终止节点编号
