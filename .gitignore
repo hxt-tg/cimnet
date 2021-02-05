@@ -44,5 +44,8 @@
 # vim
 .ycm_extra_conf.py
 
+# VS Code
+.vscode/
+
 # Release zip
 release/
