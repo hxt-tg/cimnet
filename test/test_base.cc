@@ -133,12 +133,32 @@ void test_directed_network() {
                 << std::endl;
 }
 
+void test_copy_constructor() {
+    Network<int, std::string, std::string> n;
+    n.add_edge(1, 2, "1 to 2");
+    n.add_edge(1, 3, "1 to 3");
+    n[1] = "Node 1";
+    n[2] = "Node 2";
+    n[3] = "Node 3";
+    DirectedNetwork<int, std::string, std::string> dn(n);
+    std::cout << "Network (copied):" << std::endl;
+    for (auto i: dn.nodes())
+        std::cout << " Node " << i << "   data=" << dn.node(i) << std::endl;
+    for (auto e: dn.edges())
+            std::cout << "[" << e.first << "->" << e.second << "] data="
+                << dn(e.first, e.second)
+                << std::endl;
+
+}
+
 int main(void) {
     /* test_construct_net(); */
     /* test_modify_net(); */
     /* test_efficiency(); */
     /* test_properties(); */
-    test_directed_network();
+    /* test_directed_network(); */
+    test_copy_constructor();
+
     return 0;
 }
 

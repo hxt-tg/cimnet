@@ -64,8 +64,8 @@ class Network {
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
     }
     Network (const _DiNetType &net) : _nodes(), _adjs() {
-        for (auto n: net._nodes)
-            add_node(n.first, n.second);
+        for (auto n: net.nodes())
+            add_node(n, net.get_node_data(n));
         for (auto e: net.edges())
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
     }
@@ -127,7 +127,14 @@ class Network {
         return has_edge(id1, id2);
     }
 
+    /* TODO: Optimize code structure of node and get_node_data. */
     inline _NData &node(const _NId &id) {
+        if (!has_node(id))
+            throw NoNodeException<_NId>(id);
+        return _nodes.at(id);
+    }
+
+    inline _NData get_node_data(const _NId &id) const {
         if (!has_node(id))
             throw NoNodeException<_NId>(id);
         return _nodes.at(id);
@@ -245,8 +252,8 @@ class DirectedNetwork {
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
     }
     DirectedNetwork (const _NetType &net): _nodes(), _pred(), _succ() {
-        for (auto n: net._nodes)
-            add_node(n.first, n.second);
+        for (auto n: net.nodes())
+            add_node(n, net.get_node_data(n));
         for (auto e: net.edges()) {
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
             add_edge(e.second, e.first, net.get_edge_data(e.first, e.second));
@@ -324,7 +331,14 @@ class DirectedNetwork {
                _pred.at(id1).find(id2) != _pred.at(id1).end();
     }
 
+    /* TODO: Optimize code structure of node and get_node_data. */
     inline _NData &node(const _NId &id) {
+        if (!has_node(id))
+            throw NoNodeException<_NId>(id);
+        return _nodes.at(id);
+    }
+
+    inline _NData get_node_data(const _NId &id) const {
         if (!has_node(id))
             throw NoNodeException<_NId>(id);
         return _nodes.at(id);
@@ -413,7 +427,7 @@ class DirectedNetwork {
             for (auto &n : _pred.at(id))
                 nei.insert(n.first);
         }
-        return std::vector<_NId>(nei);
+        return std::vector<_NId>(nei.begin(), nei.end());
     }
 
     inline std::vector<_NId> nodes() const {
