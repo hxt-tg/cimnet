@@ -17,9 +17,11 @@
 #include <unordered_set>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 #include "_types.h"
 #include "_exception.h"
+#include "random.h"
 
 
 struct HashPair {
@@ -195,7 +197,11 @@ class Network {
 
     inline _NId random_neighbor(const _NId &id) const {
         if (!has_node(id)) throw NoNodeException<_NId>(id);
-        return 1;
+        int deg = degree(id);
+        if (deg == 0) throw NoNeighborsException<_NId>(id);
+        auto it = _adjs.at(id).cbegin();
+        std::advance(it, randi(deg));
+        return it->first;
     }
 
     inline std::vector<_NId> nodes() const {
@@ -422,6 +428,24 @@ class DirectedNetwork {
             for (auto &n : _pred.at(id))
                 nei.push_back(n.first);
         return nei;
+    }
+
+    inline _NId random_successor(const _NId &id) const {
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        int deg = out_degree(id);
+        if (deg == 0) throw NoNeighborsException<_NId>(id);
+        auto it = _succ.at(id).cbegin();
+        std::advance(it, randi(deg));
+        return it->first;
+    }
+
+    inline _NId random_predecessor(const _NId &id) const {
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        int deg = in_degree(id);
+        if (deg == 0) throw NoNeighborsException<_NId>(id);
+        auto it = _pred.at(id).cbegin();
+        std::advance(it, randi(deg));
+        return it->first;
     }
 
     inline std::vector<_NId> neighbors(const _NId &id) const {

@@ -231,6 +231,24 @@
         :param id: 节点编号
         :return: 节点 :var:`id` 的前序节点编号数组。（若该点不存在则返回空数组）
 
+    .. function:: _NId random_successor(const _NId &id) const
+
+        获取该节点的一个随机后继节点。
+
+        :param id: 节点编号
+        :return: 节点 :var:`id` 的一个随机后继节点
+        :throw NoNodeException: 节点 :var:`id` 不存在
+        :throw NoNeighborsException: 节点 :var:`id` 没有后继节点
+
+    .. function:: _NId random_predecessor(const _NId &id) const
+
+        获取该节点的一个随机前序节点。
+
+        :param id: 节点编号
+        :return: 节点 :var:`id` 的一个随机前序节点
+        :throw NoNodeException: 节点 :var:`id` 不存在
+        :throw NoNeighborsException: 节点 :var:`id` 没有前序节点
+
     .. function:: std::vector<_NId> neighbors(const _NId &id) const
 
         获取与该节点有连边关系的相邻节点编号数组。（无论指向）

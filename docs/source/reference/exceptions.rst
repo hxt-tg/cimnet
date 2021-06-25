@@ -93,3 +93,29 @@
 
         terminate called after throwing an instance of 'NoEdgeException<int>'
           what():  Network error: No edge from 3 to 5.
+
+缺失邻居异常类
+--------------
+
+.. class:: template <class _NId> \
+           NoNeighborsException : public NetworkException
+
+    当尝试访问网络中某个节点的邻居（或前序节点、后继节点），不存在抛出该异常。
+
+    :tparam _NId: 节点编号类型（默认为 :type:`Id`）
+
+    .. function:: NoNeighborsException(const _NId &id)
+
+        构造缺失邻居异常对象。
+
+        :param id: 缺失邻居的节点编号
+
+.. note::
+
+    抛出异常 :expr:`NoNeighborsException<int>(65536)` 时会显示：
+
+    .. code-block:: none
+
+        terminate called after throwing an instance of 'NoNeighborsException<int>'
+          what():  Network error: Node 65536 has no neighbors.
+

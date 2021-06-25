@@ -145,19 +145,37 @@ void test_copy_constructor() {
     for (auto i: dn.nodes())
         std::cout << " Node " << i << "   data=" << dn.node(i) << std::endl;
     for (auto e: dn.edges())
-            std::cout << "[" << e.first << "->" << e.second << "] data="
-                << dn(e.first, e.second)
-                << std::endl;
-
+        std::cout << "[" << e.first << "->" << e.second << "] data="
+                  << dn(e.first, e.second)
+                  << std::endl;
 }
 
-int main(void) {
-    /* test_construct_net(); */
-    /* test_modify_net(); */
-    /* test_efficiency(); */
-    /* test_properties(); */
-    /* test_directed_network(); */
-    test_copy_constructor();
+void test_random_neighbor() {
+    Network<int, std::string, std::string> n;
+    n.add_edge(1, 2, "1 to 2");
+    n.add_edge(1, 3, "1 to 3");
+    n.add_edge(1, 4, "1 to 3");
+    n.add_edge(1, 8, "1 to 3");
+    n[1] = "Node 1";
+    n[2] = "Node 2";
+    n[3] = "Node 3";
+    n[4] = "Node 4";
+    n[8] = "Node 8";
+    DirectedNetwork<int, std::string, std::string> dn(n);
+    std::cout << " Node " << 1 << "'s random successors:";
+    for (auto i = 0; i < 10; i++)
+        std::cout << " " << dn.random_successor(1);
+    std::cout << std::endl;
+}
+
+int main() {
+//    test_construct_net();
+//    test_modify_net();
+//    test_efficiency();
+//    test_properties();
+//    test_directed_network();
+//    test_copy_constructor();
+    test_random_neighbor();
 
     return 0;
 }

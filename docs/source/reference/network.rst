@@ -191,6 +191,15 @@
         :param id: 节点编号
         :return: 与节点 :var:`id` 相邻的节点编号数组。（若该点不存在则返回空数组）
 
+    .. function:: _NId random_neighbor(const _NId &id) const
+
+        获取该节点的一个随机邻居。
+
+        :param id: 节点编号
+        :return: 节点 :var:`id` 的一个随机邻居
+        :throw NoNodeException: 节点 :var:`id` 不存在
+        :throw NoNeighborsException: 节点 :var:`id` 没有邻居
+
     .. function:: std::vector<_NId> nodes() const
 
         获取所有节点编号的数组。

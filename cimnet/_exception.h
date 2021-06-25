@@ -50,12 +50,22 @@ class NoEdgeException : public NetworkException {
 
 template <class _NId=Id>
 class NoNodeException: public NetworkException {
-    public:
-        explicit NoNodeException(const _NId &id){
-            std::stringstream stream;
-            stream << "Node " << id << " not found.";
-            set_info(stream.str());
-        }
+public:
+    explicit NoNodeException(const _NId &id){
+        std::stringstream stream;
+        stream << "Node " << id << " not found.";
+        set_info(stream.str());
+    }
+};
+
+template <class _NId=Id>
+class NoNeighborsException: public NetworkException {
+public:
+    explicit NoNeighborsException(const _NId &id){
+        std::stringstream stream;
+        stream << "Node " << id << " has no neighbors.";
+        set_info(stream.str());
+    }
 };
 
 #endif /* ifndef CIMNET_EXCEPTION */
