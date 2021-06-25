@@ -1,16 +1,16 @@
 # CimNet
 
-_Version: 0.1.3_
+_Version: 0.1.4_
 
 CimNet is a pure C++ library for simulations on complex networks.
-It follow the standard of `C++11`.
+It follows the standard of `C++11`.
 
 CimNet provides features below:
 
 - easy-to-use tools for creation and modification of complex networks;
 - storing self-defined data into nodes and edges;
 - several implementations of typical networks;
-- the ability to inherite and expand your own network structures.
+- the ability to inherit and expand your own network structures.
 
 ## Install
 
@@ -27,7 +27,7 @@ g++ xxx.cc -o xxx.out -std=c++11 -O2 -I /path/to/your/project
 
 ## Simple usage
 
-Construct an regular network with 10 nodes and 3 clockwise links for each node.
+Construct a regular network with 10 nodes and 3 clockwise links for each node.
 Then we print network info and neighbors of node 1.
 
 ```cpp

@@ -78,7 +78,7 @@
  *
  *  Create a 2-dimensional grid network of width * height, where each
  *  node connects to neighbors given radius of range under Manhattan
- *  distance, Euclidean distance or custommized range mask function.
+ *  distance, Euclidean distance or customized range mask function.
  *  If a customized mask is given, each node connects to neighbors
  *  according to the mask.
  *

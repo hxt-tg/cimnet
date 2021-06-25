@@ -459,4 +459,4 @@ class DirectedNetwork {
     _AdjType _succ;   /* _adjs */
 };
 
-#endif /* ifndef CIMNNET_BASE_NET */
+#endif /* ifndef CIMNET_BASE_NET */
