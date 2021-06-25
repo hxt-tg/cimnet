@@ -160,7 +160,7 @@ class FullConnectedNetwork;
 template <class _NData, class _EData>
 class FullConnectedNetwork: public Network<int, _NData, _EData>{
     public:
-        FullConnectedNetwork(int n_nodes) {
+        explicit FullConnectedNetwork(int n_nodes) {
             if (n_nodes < 0)
                 throw NetworkException("Number of nodes should be positive.");
 
@@ -190,7 +190,7 @@ class RegularNetwork: public Network<int, _NData, _EData>{
             this->n_links = n_links;
         }
     private:
-        int n_links;
+        int n_links{};
 };
 
 
@@ -215,7 +215,7 @@ class ERNetwork: public Network<int, _NData, _EData>{
             this->prob_link = prob_link;
         }
     private:
-        double prob_link;
+        double prob_link{};
 };
 
 
@@ -249,9 +249,9 @@ class GridNetwork: public Network<int, _NData, _EData>{
             this->n_neighbors = n_neighbors;
         }
     private:
-        int width;
-        int height;
-        int n_neighbors;
+        int width{};
+        int height{};
+        int n_neighbors{};
 };
 
 
@@ -265,8 +265,8 @@ class CustomizableGridNetwork: public Network<int, _NData, _EData> {
     typedef RangeMask (*MaskFunction)(double);
 
     private:
-    int width;
-    int height;
+    int width{};
+    int height{};
     void _build(int width, int height, RangeMask &mask) {
         if (width < 0 || height < 0)
             throw NetworkException("Width and height should be positive.");
@@ -295,7 +295,7 @@ class CustomizableGridNetwork: public Network<int, _NData, _EData> {
 
     static RangeMask ManhattanMask(double radius) {
         RangeMask mask;
-        int r = radius;
+        int r = floor(radius);
         for (int x = 0; x <= r; ++x)
             for (int y = 1; y <= r-x; ++y) {
                 mask.push_back(std::make_pair( x,  y));
@@ -346,9 +346,9 @@ class CubicNetwork: public Network<int, _NData, _EData>{
             this->height = height;
         }
     private:
-        int length;
-        int width;
-        int height;
+        int length{};
+        int width{};
+        int height{};
 };
 
 
@@ -374,8 +374,8 @@ class HoneycombNetwork: public Network<int, _NData, _EData>{
             this->honeycomb_height = honeycomb_height;
         }
     private:
-        int honeycomb_width;
-        int honeycomb_height;
+        int honeycomb_width{};
+        int honeycomb_height{};
 };
 
 
@@ -404,8 +404,8 @@ class KagomeNetwork: public Network<int, _NData, _EData>{
             this->kagome_height = kagome_height;
         }
     private:
-        int kagome_width;
-        int kagome_height;
+        int kagome_width{};
+        int kagome_height{};
 };
 
 
@@ -446,6 +446,6 @@ class ScaleFreeNetwork: public Network<int, _NData, _EData>{
             this->n_edges_per_node = n_edges_per_node;
         }
     private:
-        int n_edges_per_node;;
+        int n_edges_per_node{};
 };
 #endif /* ifndef CIMNET_NETWORK */

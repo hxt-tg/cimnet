@@ -63,7 +63,7 @@ class Network {
         for (auto e: net.edges())
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
     }
-    Network (const _DiNetType &net) : _nodes(), _adjs() {
+    explicit Network (const _DiNetType &net) : _nodes(), _adjs() {
         for (auto n: net.nodes())
             add_node(n, net.get_node_data(n));
         for (auto e: net.edges())
@@ -87,7 +87,7 @@ class Network {
         if (!has_node(id1)) add_node(id1);
         if (!has_node(id2)) add_node(id2);
         if (has_edge(id1, id2)) delete _adjs[id1][id2];
-        _EData *data_ptr = new _EData();
+        auto *data_ptr = new _EData();
         *data_ptr = edge_data;
         _adjs[id1][id2] = data_ptr;
         _adjs[id2][id1] = data_ptr;
@@ -146,7 +146,7 @@ class Network {
         if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_adjs.at(id1).at(id2));
-        } catch (std::exception e){
+        } catch (std::exception &e){
             throw NoEdgeException<_NId>(id1, id2);
         }
     }
@@ -156,7 +156,7 @@ class Network {
         if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_adjs.at(id1).at(id2));
-        } catch (std::exception e){
+        } catch (std::exception &e){
             throw NoEdgeException<_NId>(id1, id2);
         }
     }
@@ -191,6 +191,11 @@ class Network {
             for (auto &n : _adjs.at(id))
                 nei.push_back(n.first);
         return nei;
+    }
+
+    inline _NId random_neighbor(const _NId &id) const {
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        return 1;
     }
 
     inline std::vector<_NId> nodes() const {
@@ -251,7 +256,7 @@ class DirectedNetwork {
         for (auto e: net.edges())
             add_edge(e.first, e.second, net.get_edge_data(e.first, e.second));
     }
-    DirectedNetwork (const _NetType &net): _nodes(), _pred(), _succ() {
+    explicit DirectedNetwork (const _NetType &net): _nodes(), _pred(), _succ() {
         for (auto n: net.nodes())
             add_node(n, net.get_node_data(n));
         for (auto e: net.edges()) {
@@ -278,7 +283,7 @@ class DirectedNetwork {
         if (!has_node(id1)) add_node(id1);
         if (!has_node(id2)) add_node(id2);
         if (has_edge(id1, id2)) delete _succ[id1][id2];
-        _EData *data_ptr = new _EData();
+        auto *data_ptr = new _EData();
         *data_ptr = edge_data;
         _succ[id1][id2] = data_ptr;
         _pred[id2][id1] = data_ptr;
@@ -350,7 +355,7 @@ class DirectedNetwork {
         if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_succ.at(id1).at(id2));
-        } catch (std::exception e){
+        } catch (std::exception &e){
             throw NoEdgeException<_NId>(id1, id2);
         }
     }
@@ -360,7 +365,7 @@ class DirectedNetwork {
         if (!has_node(id2)) throw NoNodeException<_NId>(id2);
         try {
             return *(_succ.at(id1).at(id2));
-        } catch (std::exception e){
+        } catch (std::exception &e){
             throw NoEdgeException<_NId>(id1, id2);
         }
     }

@@ -1,6 +1,6 @@
 # Project: cimnet
 
-vpath %.h cimnet
+vpath %.h ../cimnet
 vpath %.cc src
 
 VERSION   = 0.1.4
@@ -16,8 +16,8 @@ CPPFLAGS  = -std=c++11 -Wall -Wextra $(OPT_LEVEL)
 all: test
 
 clean:
-	rm -rf bin
+	rm -rf *.out
 
-test: test_base.cc $(HEADERS)
-	$(CPP) test_base.cc -o bin/test_base.out $(INC) $(CPPFLAGS)
-	$(CPP) test_network.cc -o bin/test_network.out $(INC) $(CPPFLAGS)
+test: test_base.cc test_network.cc
+	$(CPP) test_base.cc -o test_base.out $(INC) $(CPPFLAGS)
+	$(CPP) test_network.cc -o test_network.out $(INC) $(CPPFLAGS)

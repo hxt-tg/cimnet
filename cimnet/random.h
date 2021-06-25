@@ -14,7 +14,7 @@
 #define CIMNET_RANDOM
 
 void sgenrand(unsigned long seed);
-void lsgenrand(unsigned long seed_array[]);
+void lsgenrand(const unsigned long seed_array[]);
 double genrand();
 double randf();
 long randi(unsigned long LIM);
@@ -30,10 +30,10 @@ long randi(unsigned long LIM);
 #define TEMPERING_MASK_C 0xefc60000
 #define NAMEOUT     "K4b075r5Q2"
 
-#define TEMPERING_SHIFT_U(y)  (y >> 11)
-#define TEMPERING_SHIFT_S(y)  (y << 7)
-#define TEMPERING_SHIFT_T(y)  (y << 15)
-#define TEMPERING_SHIFT_L(y)  (y >> 18)
+#define TEMPERING_SHIFT_U(y)  ((y) >> 11)
+#define TEMPERING_SHIFT_S(y)  ((y) << 7)
+#define TEMPERING_SHIFT_T(y)  ((y) << 15)
+#define TEMPERING_SHIFT_L(y)  ((y) >> 18)
 
 static unsigned long mt[NN];        /* the array for the state vector  */
 static int mti = NN + 1;            /* mti==NN+1 means mt[NN] is not initialized */
@@ -47,7 +47,7 @@ void sgenrand(unsigned long seed){
     mti = NN;
 }
 
-void lsgenrand(unsigned long seed_array[]){
+void lsgenrand(const unsigned long seed_array[]){
     int i; for (i = 0; i < NN; i++) mt[i] = seed_array[i]; mti = NN;
 }
 
@@ -80,7 +80,7 @@ double randf(){
 }
 
 long randi(unsigned long LIM){
-    return((unsigned long)genrand() % LIM);
+    return (long)((unsigned long)genrand() % LIM);
 }
 
 #endif

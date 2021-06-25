@@ -22,11 +22,11 @@
 class NetworkException : public std::exception {
     public:
         NetworkException() : _info("Network error: ") {}
-        NetworkException(const std::string &info) : _info("Network error: " + info) {}
+        explicit NetworkException(const std::string &info) : _info("Network error: " + info) {}
         void set_info(const std::string &info){
             _info = std::string("Network error: " + info);
         }
-        const char *what() const noexcept{
+        const char *what() const noexcept override {
             return _info.c_str();
         }
     public:
@@ -51,7 +51,7 @@ class NoEdgeException : public NetworkException {
 template <class _NId=Id>
 class NoNodeException: public NetworkException {
     public:
-        NoNodeException(const _NId &id){
+        explicit NoNodeException(const _NId &id){
             std::stringstream stream;
             stream << "Node " << id << " not found.";
             set_info(stream.str());
