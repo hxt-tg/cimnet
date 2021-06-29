@@ -50,3 +50,7 @@
 
 # Release zip
 release/
+
+# Graph data
+*.csv
+*.gml

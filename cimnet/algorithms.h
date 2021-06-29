@@ -6,17 +6,14 @@
  */
 
 /*
- *  This file contains definition of basic types.
+ *  This file contains algorithms, such as calculating shortest path.
  *  For further usage, check out http://doc.hxtcloud.cn.
  */
 
-#ifndef CIMNET_TYPES
-#define CIMNET_TYPES
+#ifndef CIMNET_ALGORITHMS
+#define CIMNET_ALGORITHMS
 
-typedef double Weight;
-typedef unsigned int Id;
+#include "_base_net.h"
 
-class _NoneType {};
-typedef _NoneType None;
 
-#endif /* ifndef CIMNET_TYPES */
+#endif /* ifndef CIMNET_ALGORITHMS */
