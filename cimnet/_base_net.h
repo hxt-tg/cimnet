@@ -33,6 +33,56 @@ struct HashPair {
         }
 };
 
+
+template<class _NId, class _NData, class _EData>
+class NeighborViewIterator {
+public:
+    using _NeiType = typename std::unordered_map<_NId, _EData *>;
+    using _NeiTypeIterator = typename _NeiType::const_iterator;
+
+    explicit NeighborViewIterator(const _NeiTypeIterator &iterator) : _iter{iterator} {}
+
+    bool operator!=(const NeighborViewIterator &other) const {
+        return _iter != other._iter;
+    }
+
+    const _NId &operator*() const {
+        return _iter->first;
+    }
+
+    const NeighborViewIterator &operator++() {
+        ++_iter;
+        return *this;
+    }
+
+private:
+    _NeiTypeIterator _iter{};
+};
+
+template<class _NId, class _NData, class _EData>
+class NeighborView {
+public:
+    using _NeiType = typename std::unordered_map<_NId, _EData *>;
+    using _NeiTypeIterator = typename _NeiType::const_iterator;
+    using _NeighborViewIterator = NeighborViewIterator<_NId, _NData, _EData>;
+
+    explicit NeighborView(const _NeiTypeIterator &nei_type_begin, const _NeiTypeIterator &nei_type_end)
+            : _begin(nei_type_begin), _end(nei_type_end) {}
+
+    _NeighborViewIterator begin() const {
+        return _NeighborViewIterator(_begin);
+    }
+
+    _NeighborViewIterator end() const {
+        return _NeighborViewIterator(_end);
+    }
+
+private:
+    _NeiTypeIterator _begin{};
+    _NeiTypeIterator _end{};
+};
+
+
 template <class _NId=Id, class _NData=None, class _EData=None>
 class Network;
 template <class _NId=Id, class _NData=None, class _EData=None>
@@ -193,6 +243,12 @@ class Network {
             for (auto &n : _adjs.at(id))
                 nei.push_back(n.first);
         return nei;
+    }
+
+    inline NeighborView<_NId, _NData, _EData> iterate_neighbors(const _NId &id) const {
+//        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        const auto &_nei = _adjs.at(id);
+        return NeighborView<_NId, _NData, _EData>(_nei.begin(), _nei.end());
     }
 
     inline _NId random_neighbor(const _NId &id) const {
@@ -422,12 +478,24 @@ class DirectedNetwork {
         return nei;
     }
 
+    inline NeighborView<_NId, _NData, _EData> iterate_successors(const _NId &id) const {
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        const auto &_nei = _succ.at(id);
+        return NeighborView<_NId, _NData, _EData>(_nei.begin(), _nei.end());
+    }
+
     inline std::vector<_NId> predecessors(const _NId &id) const {
         std::vector<_NId> nei;
         if (has_node(id))
             for (auto &n : _pred.at(id))
                 nei.push_back(n.first);
         return nei;
+    }
+
+    inline NeighborView<_NId, _NData, _EData> iterate_predecessors(const _NId &id) const {
+        if (!has_node(id)) throw NoNodeException<_NId>(id);
+        const auto &_nei = _pred.at(id);
+        return NeighborView<_NId, _NData, _EData>(_nei.begin(), _nei.end());
     }
 
     inline _NId random_successor(const _NId &id) const {
@@ -457,7 +525,7 @@ class DirectedNetwork {
                 nei.insert(n.first);
         }
         return std::vector<_NId>(nei.begin(), nei.end());
-    }
+    }  // TODO: DirectedNetwork::iterate_neighbors
 
     inline std::vector<_NId> nodes() const {
         std::vector<_NId> nei;

@@ -47,6 +47,8 @@
 # IDE
 .vscode/
 .idea/
+cmake-build-*/
+out/
 
 # Release zip
 release/

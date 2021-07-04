@@ -1,6 +1,9 @@
 #include <iostream>
+#include <chrono>
 #include "cimnet/network.h"
 #include "cimnet/_base_net.h"
+
+using namespace std::chrono;
 
 typedef struct {
     std::string desc;
@@ -168,6 +171,26 @@ void test_random_neighbor() {
     std::cout << std::endl;
 }
 
+void test_performance_neighbors(Network<int> &net) {
+    auto start = high_resolution_clock::now();
+    for (auto i = 0; i < 100000; i++)
+        for (const auto &n : net.neighbors(1))
+            net.degree(n);
+    auto duration = (double)duration_cast<microseconds>(high_resolution_clock::now() - start).count()*
+                    microseconds::period::num / microseconds::period::den;
+    std::cout << "Neighbors: " << duration << " seconds.\n";
+}
+
+void test_performance_iterate_neighbors(Network<int> &net) {
+    auto start = high_resolution_clock::now();
+    for (auto i = 0; i < 100000; i++)
+        for (const auto &n : net.iterate_neighbors(1))
+            net.degree(n);
+    auto duration = (double)duration_cast<microseconds>(high_resolution_clock::now() - start).count()*
+                    microseconds::period::num / microseconds::period::den;
+    std::cout << "Iterate neighbors: " << duration << " seconds.\n";
+}
+
 int main() {
 //    test_construct_net();
 //    test_modify_net();
@@ -175,7 +198,16 @@ int main() {
 //    test_properties();
 //    test_directed_network();
 //    test_copy_constructor();
-    test_random_neighbor();
+//    test_random_neighbor();
+
+    auto start = high_resolution_clock::now();
+    FullConnectedNetwork<> net(10000);
+    auto duration = (double)duration_cast<microseconds>(high_resolution_clock::now() - start).count()*
+            microseconds::period::num / microseconds::period::den;
+    std::cout << "Construct 10000 full connected: " << duration << " seconds.\n";
+
+    test_performance_neighbors(net);
+    test_performance_iterate_neighbors(net);
 
     return 0;
 }
