@@ -34,6 +34,57 @@ struct HashPair {
 };
 
 
+/* Network nodes view */
+template<class _NId, class _NData, class _EData>
+class NodesViewIterator {
+public:
+    using _NType = typename std::unordered_map<_NId, _NData>;
+    using _NTypeIterator = typename _NType::const_iterator;
+
+    explicit NodesViewIterator(const _NTypeIterator &iterator) : _iter{iterator} {}
+
+    bool operator!=(const NodesViewIterator &other) const {
+        return _iter != other._iter;
+    }
+
+    const _NId &operator*() const {
+        return _iter->first;
+    }
+
+    const NodesViewIterator &operator++() {
+        ++_iter;
+        return *this;
+    }
+
+private:
+    _NTypeIterator _iter{};
+};
+
+template<class _NId, class _NData, class _EData>
+class NodesView {
+public:
+    using _NType = typename std::unordered_map<_NId, _NData>;
+    using _NTypeIterator = typename _NType::const_iterator;
+    using _NodesViewIterator = NodesViewIterator<_NId, _NData, _EData>;
+
+    explicit NodesView(const _NTypeIterator &node_type_begin, const _NTypeIterator &node_type_end)
+            : _begin(node_type_begin), _end(node_type_end) {}
+
+    _NodesViewIterator begin() const {
+        return _NodesViewIterator(_begin);
+    }
+
+    _NodesViewIterator end() const {
+        return _NodesViewIterator(_end);
+    }
+
+private:
+    _NTypeIterator _begin{};
+    _NTypeIterator _end{};
+};
+
+
+/* Neighbor view */
 template<class _NId, class _NData, class _EData>
 class NeighborViewIterator {
 public:
@@ -265,6 +316,10 @@ class Network {
         for (auto &n : _nodes)
             nei.push_back(n.first);
         return nei;
+    }
+
+    inline NodesView<_NId, _NData, _EData> iterate_nodes() const {
+        return NodesView<_NId, _NData, _EData>(_nodes.begin(), _nodes.end());
     }
 
     inline _ESetType edges() const {
@@ -532,6 +587,10 @@ class DirectedNetwork {
         for (auto &n : _nodes)
             nei.push_back(n.first);
         return nei;
+    }
+
+    inline NodesView<_NId, _NData, _EData> iterate_nodes() const {
+        return NodesView<_NId, _NData, _EData>(_nodes.begin(), _nodes.end());
     }
 
     inline _ESetType edges() const {

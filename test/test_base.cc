@@ -191,6 +191,22 @@ void test_performance_iterate_neighbors(Network<int> &net) {
     std::cout << "Iterate neighbors: " << duration << " seconds.\n";
 }
 
+void test_performance_iterate_nodes_view(Network<int> &net) {
+    std::cout << "Copying directed network...\n";
+    auto start = high_resolution_clock::now();
+    DirectedNetwork<int> di_net(net);
+    for (auto i = 0; i < 1000; i++) {
+        for (const auto &n : net.iterate_nodes())
+            net.degree(n);
+    }
+    auto duration = (double)duration_cast<microseconds>(high_resolution_clock::now() - start).count()*
+                    microseconds::period::num / microseconds::period::den;
+    std::cout << "Iterate nodes in DirectedNetwork: " << duration << " seconds.\n";
+}
+
+void temp() {
+}
+
 int main() {
 //    test_construct_net();
 //    test_modify_net();
@@ -201,13 +217,14 @@ int main() {
 //    test_random_neighbor();
 
     auto start = high_resolution_clock::now();
-    FullConnectedNetwork<> net(10000);
+    FullConnectedNetwork<> net(5000);
     auto duration = (double)duration_cast<microseconds>(high_resolution_clock::now() - start).count()*
             microseconds::period::num / microseconds::period::den;
-    std::cout << "Construct 10000 full connected: " << duration << " seconds.\n";
+    std::cout << "Construct 1000 full connected: " << duration << " seconds.\n";
 
-    test_performance_neighbors(net);
-    test_performance_iterate_neighbors(net);
+//    test_performance_neighbors(net);
+//    test_performance_iterate_neighbors(net);
+    test_performance_iterate_nodes_view(net);
 
     return 0;
 }
