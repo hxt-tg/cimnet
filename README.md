@@ -67,6 +67,6 @@ Report bugs in
 CimNet is released under the GNU General Public License Version 3 (GPLv3).
 
 ```
-Copyright (C) 2021 CimNet Developers
+Copyright (C) 2022 CimNet Developers
 Xintao Hu <hxt.taoge@gmail.com>
 ```

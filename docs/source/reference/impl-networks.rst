@@ -54,7 +54,7 @@ ER随机图
         :param n_nodes: 总节点数
         :param prob_link: 每两对节点间的连边概率
         :throw NetworkException: :var:`n_nodes` 小于 0
-        :throw NetworkException: :var:`prob_link` 不在 :expr:`[0, 1]` 范围内
+        :throw NetworkException: :var:`prob_link` 不在 ``[0, 1]`` 范围内
 
 .. _grid-network:
 

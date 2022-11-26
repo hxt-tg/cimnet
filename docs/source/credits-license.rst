@@ -14,7 +14,7 @@ CimNet 使用第三版GNU通用公共许可证（GPLv3）作为发布自由软�
 
 .. code-block:: none
 
-    Copyright (C) 2021 CimNet Developers
+    Copyright (C) 2022 CimNet Developers
     Xintao Hu <hxt.taoge@gmail.com>
 
 .. _credits:

@@ -5,7 +5,7 @@
 CimNet 使用说明
 ===============
 
-如果你之前编写过 C 语言，但是从未接触过 C++ 语言，或者不了解 ``C++11`` 标准的新特性，可以跳转到章节“\ :ref:`cimnet-about-cpp`\ ”快速了解 CimNet 使用的语言特性。
+如果你之前编写过 C 语言，但是从未接触过 C++ 语言，或者不了解 C++11 标准的新特性，可以跳转到章节“\ :ref:`cimnet-about-cpp`\ ”快速了解 CimNet 使用的语言特性。
 
 .. _file-structure:
 
@@ -145,7 +145,7 @@ CimNet 工具包含于 :file:`cimnet` 文件夹内，由以下文件组成：
     net.edge(1, 2) = {3, 3.14};
     net(1, 2) = {3, 3.14};
 
-同理，第一条语句使用调用函数的形式访问边数据的引用，第二条语句是一种更简便的方式——它重载了这个类的括号操作符。当然，由于 :func:`edge(id1, id2)<Network::edge>` 方法返回的是 :expr:`EdgeDetail` 结构体的引用，你可以使用 :expr:`.` 直接修改内部成员：
+同理，第一条语句使用调用函数的形式访问边数据的引用，第二条语句是一种更简便的方式——它重载了这个类的括号操作符。当然，由于 :func:`edge(id1, id2)<Network::edge>` 方法返回的是 :expr:`EdgeDetail` 结构体的引用，你可以使用 ``.`` 直接修改内部成员：
 
 .. code-block:: cpp
 
@@ -206,9 +206,9 @@ CimNet 提供拷贝构造器完成网络的拷贝操作。你可以将一个网�
     for (auto &neighbor : net.neighbors())
         // Visit neighbor
 
-其中由于边 :expr:`edge` 是 :expr:`std::pair<NodeId, NodeId>` 类型， ``C++11`` 中需要用 :expr:`edge.first` 和 :expr:`edge.second` 访问一条边中的两个节点编号。对于无向网络而言， :expr:`edge.first` 是一条边中较小的一个节点编号（数值较小或字符串字母序靠前的）；有向网络中 :expr:`edge.first` 是前序节点， :expr:`edge.second` 是后继节点。
+其中由于边 :expr:`edge` 是 :expr:`std::pair<NodeId, NodeId>` 类型， C++11 中需要用 :expr:`edge.first` 和 :expr:`edge.second` 访问一条边中的两个节点编号。对于无向网络而言， :expr:`edge.first` 是一条边中较小的一个节点编号（数值较小或字符串字母序靠前的）；有向网络中 :expr:`edge.first` 是前序节点， :expr:`edge.second` 是后继节点。
 
-（如果你支持 ``C++17`` 及以上的编译环境，可以尝试将循环替换为 :expr:`for (auto &[i, j] : net.edges())` ，其中 :expr:`i` 和 :expr:`j` 等效于 :expr:`edge.first` 和 :expr:`edge.second` 。）
+（如果你支持 C++17 及以上的编译环境，可以尝试将循环替换为 ``for (auto &[i, j] : net.edges())`` ，其中 :expr:`i` 和 :expr:`j` 等效于 :expr:`edge.first` 和 :expr:`edge.second` 。）
 
 另外，对于无向网络而言， :func:`neighbors(id)<Network::neighbors>` 返回了节点 :expr:`id` 所有相邻节点编号。对于有向网络而言， :func:`neighbors(id)<DirectedNetwork::neighbors>` 返回了所有与节点 :expr:`id` 有关联（无论方向）的节点编号。有向网络还提供了 :func:`predecessors(id)<DirectedNetwork::predecessors>` 方法用来返回节点 :expr:`id` 的所有前序节点编号， :func:`successors()<DirectedNetwork::successors>` 方法用来返回节点 :expr:`id` 的所有后继节点编号，它们的遍历方式与 :func:`neighbors(id)<DirectedNetwork::neighbors>` 类似。
 
